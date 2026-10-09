@@ -1,0 +1,128 @@
+:root{
+  color-scheme:dark;
+  --surface:#1a1716;
+  --border:#ffffff24;
+  --border-subtle:#ffffff0c;
+  --outline:#deddd9;
+  --header-background:#111111e8;
+  --menu-background:#080909f2;
+  --control-background:#111c;
+  --on-accent:#17140e;
+  --on-media:#f5f5f3;
+}
+html[data-theme="light"]{
+  color-scheme:light;
+  --background:#f7f6f2;
+  --foreground:#252421;
+  --muted:#68635c;
+  --gold:#8a6114;
+  --surface:#ffffff;
+  --border:#25242126;
+  --border-subtle:#25242112;
+  --outline:#4f4c45;
+  --header-background:#f7f6f2ee;
+  --menu-background:#f7f6f2f5;
+  --control-background:#f7f6f2eb;
+  --on-accent:#ffffff;
+}
+
+body,.site-shell{background:var(--background);color:var(--foreground)}
+.header{background:var(--header-background);border-bottom-color:var(--border-subtle)}
+.header-actions,.fullscreen-menu-actions{display:flex;align-items:center;gap:20px}
+.theme-toggle{display:grid;place-items:center;width:36px;height:36px;padding:0;color:var(--foreground);background:transparent;border:1px solid var(--border);border-radius:50%;transition:background-color var(--duration-fast) ease,border-color var(--duration-fast) ease,rotate var(--duration-ui) var(--ease-out)}
+.theme-toggle svg{width:19px;height:19px}
+.theme-toggle:hover{border-color:var(--gold);background:var(--border-subtle);rotate:12deg}
+.theme-icon-moon{display:none}
+html[data-theme="light"] .theme-icon-sun{display:none}
+html[data-theme="light"] .theme-icon-moon{display:block}
+.fullscreen-menu{background:var(--menu-background)}
+.fullscreen-menu-primary{border-color:var(--border)}
+.fullscreen-menu-group h2,.fullscreen-menu-footer>p{color:var(--muted)}
+.fullscreen-menu-footer>p>span{color:var(--muted);opacity:.8}
+.fullscreen-menu-footer{border-color:var(--border-subtle)}
+
+.hero-outline{-webkit-text-stroke-color:var(--outline)}
+.hero-note,.about-paragraphs,.service-column p,.team-member p,.testimonial-copy blockquote,.testimonial-copy>p,.blog-card>p,.modal-copy>p:not(.eyebrow){color:var(--muted)}
+.hero-author{border-color:var(--border)}
+.hero-author strong{color:var(--foreground)}
+.hero-scroll-cue{color:var(--muted)}
+.scroll-cue-line{background:var(--border)}
+.services-card,.testimonial-panel,.footer,.detail-modal{background:var(--surface)}
+.services-grid,.service-column{border-color:var(--border-subtle)}
+.project-caption{border-bottom-color:var(--border)}
+.outline-button,.testimonial-controls button,.detail-modal,.modal-close,.film-controls>button{border-color:var(--border)}
+.footer-top,.footer-main,.team-member{border-color:var(--border-subtle)}
+.footer-inner::before,.team-grid::before,.team-grid::after{background:var(--border-subtle)}
+.footer-invitation .outline-button{color:var(--foreground)}
+.modal-close{background:var(--control-background);color:var(--foreground)}
+.gold-circle,.footer-cta,.service-column:hover .small-circle,.service-column:focus-visible .small-circle{color:var(--on-accent)}
+.film-controls>div button{background:var(--border)}
+.film-controls>div .selected{background:var(--gold)}
+
+/* Text over photography keeps a dark scrim and its own high-contrast palette. */
+.stats-banner{--foreground:#f5f5f3;--muted:#bcb9b5;--gold:#efbf59;color:var(--on-media)}
+.stats-copy>p:not(.eyebrow){color:var(--muted)}
+.studio-film,.film-scene{color:var(--on-media)}
+.film-scene{--gold:#efbf59}
+.hero-controls{--gold:#efbf59}
+.hero-controls button{color:var(--on-media)}
+.hero-controls button:hover{color:var(--gold)}
+.play-button-art{color:var(--on-media)}
+
+html[data-theme="light"] .ambient-light{background:radial-gradient(ellipse,#c396342b 0%,#cba04918 34%,#bc913409 55%,transparent 72%)}
+html[data-theme="light"] .hero-sculpture::before{background:radial-gradient(ellipse,#d99c4222,transparent 67%)}
+html[data-theme="light"] .hero-heading::before{background:repeating-conic-gradient(#25242110 0deg 1deg,transparent 1deg 30deg)}
+html[data-theme="light"] .hero-heading{color:#fff;mix-blend-mode:difference}
+html[data-theme="light"] .hero{background:var(--background)}
+html[data-theme="light"] .hero-outline{-webkit-text-stroke-color:#fff}
+html[data-theme="light"] .hero-signature img{filter:invert(1)}
+html[data-theme="light"] .fingerprint{color:#a59c8b}
+html[data-theme="light"] .marquee-outline{-webkit-text-stroke-color:#25242150}
+html[data-theme="light"] .experience>strong{color:#b76300}
+html[data-theme="light"] .experience span{-webkit-text-stroke-color:#b76300}
+html[data-theme="light"] .service-number{-webkit-text-stroke-color:#25242140}
+html[data-theme="light"] .small-circle{background:#eae7e0;color:var(--foreground)}
+html[data-theme="light"] .service-column:hover,html[data-theme="light"] .service-column:focus-visible{background:#f7f6f2}
+html[data-theme="light"] .service-column:hover .small-circle,html[data-theme="light"] .service-column:focus-visible .small-circle{background:var(--gold);color:var(--on-accent)}
+html[data-theme="light"] .gold-circle:hover,html[data-theme="light"] .gold-circle:focus-visible{background:#a47822}
+html[data-theme="light"] .award-icon{background:#ecd7aa}
+html[data-theme="light"] .footer .logo-white .art img{filter:invert(1)}
+html[data-theme="light"] .project-image::after{background:radial-gradient(circle at var(--shine-x,50%) var(--shine-y,50%),#ffffff24,transparent 60%)}
+@media(max-width:700px){
+  .header-actions{gap:16px}
+  .theme-toggle{width:32px;height:32px}
+  .theme-toggle svg{width:17px;height:17px}
+  .fullscreen-menu-actions{gap:12px}
+}
+
+/* The new homepage reference uses one light palette with dark feature panels. */
+:root,html[data-theme="light"]{
+  color-scheme:light;
+  --background:#ffffff;
+  --foreground:#1d1c1b;
+  --muted:#706b66;
+  --gold:#ff8a00;
+  --surface:#f7f6f3;
+  --border:#1d1c1b26;
+  --border-subtle:#1d1c1b0b;
+  --outline:#1d1c1b;
+  --header-background:#fffffff0;
+  --menu-background:#fffffff5;
+  --control-background:#ffffffed;
+  --on-accent:#1d1c1b;
+}
+.services-card,.footer{
+  --foreground:#f5f5f3;
+  --muted:#aaa7a4;
+  --gold:#ff8a00;
+  --surface:#1a1717;
+  --border:#ffffff24;
+  --border-subtle:#ffffff0c;
+  --on-accent:#1d1c1b;
+  background:var(--surface);
+  color:var(--foreground);
+}
+html[data-theme="light"] .services-card .small-circle{background:#ffffff0d;color:var(--foreground)}
+html[data-theme="light"] .services-card .service-column:hover,html[data-theme="light"] .services-card .service-column:focus-visible{background:#ffffff05}
+html[data-theme="light"] .services-card .service-number{-webkit-text-stroke-color:#ffffff30}
+html[data-theme="light"] .footer .logo-white .art img{filter:none}

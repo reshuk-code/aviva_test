@@ -1,0 +1,19 @@
+.logo{position:relative;isolation:isolate}
+.logo::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 38%,#fff5 44%,#ffffffe6 49%,#fff5 54%,transparent 60%);background-size:300% 100%;background-position:150% 0;mask:url('/images/aviva-logo.svg') center/contain no-repeat;opacity:0;animation:aviva-logo-shine 8s ease-in-out infinite}
+.image-cursor-light{position:fixed;z-index:100;pointer-events:none;opacity:0;mask-repeat:no-repeat;background:radial-gradient(circle var(--light-radius,180px) at var(--light-x,50%) var(--light-y,50%),#fff6 0%,#fff2 30%,#fff0 72%);transition:opacity .2s ease;contain:strict}
+@keyframes aviva-logo-shine{0%,60%{background-position:150% 0;opacity:0}66%{opacity:.9}88%{background-position:-50% 0;opacity:.9}94%,100%{background-position:-50% 0;opacity:0}}
+[data-effects-offscreen],[data-effects-offscreen]::after,body[data-effects-paused] *,body[data-effects-paused] *::after{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.logo::after{animation:none!important;opacity:0!important}.image-cursor-light{display:none!important}}
+@media(hover:none),(pointer:coarse){.image-cursor-light{display:none}}
+
+.aviva-cursor{position:fixed;inset:0;z-index:2147483647;pointer-events:none!important;opacity:0;transition:opacity .15s}
+.aviva-cursor[data-visible]{opacity:1}
+.aviva-cursor-dot,.aviva-cursor-ring{position:absolute;left:0;top:0;pointer-events:none!important}
+.aviva-cursor-dot::before{content:"";position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:#ff8a00;box-shadow:0 0 0 1px #fff8;transition:scale .2s,opacity .2s}
+.aviva-cursor-ring::before{content:"";position:absolute;left:-17px;top:-17px;width:34px;height:34px;border:1px solid #ff8a0099;border-radius:50%;background:#ff8a0005;transition:scale .25s,background .25s,border-color .25s}
+.aviva-cursor[data-mode="link"] .aviva-cursor-ring::before{scale:1.35;background:#ff8a001a;border-color:#ff8a00}
+.aviva-cursor[data-mode="image"] .aviva-cursor-ring::before{scale:1.7;background:#ffffff12;border-color:#ffb541}
+.aviva-cursor[data-pressed] .aviva-cursor-ring::before{scale:.8;background:#ff8a0033}
+.aviva-cursor[data-pressed] .aviva-cursor-dot::before{scale:.65}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){html.aviva-cursor-active,html.aviva-cursor-active *{cursor:none!important}}
+@media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.aviva-cursor{display:none}}

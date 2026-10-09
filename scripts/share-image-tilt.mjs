@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+let source=fs.readFileSync('app/components/interactive.tsx','utf8');
+source=source.replace('import { Arrow, Art }', 'import { bindImageTilt } from "./image-tilt";\nimport { Arrow, Art }');
+const start=source.indexOf('    const motion = window.matchMedia',source.indexOf('export function ProjectCard'));
+const end=source.indexOf('\n  }, []);',start);
+if(start<0||end<0)throw new Error('Portfolio tilt not found');
+source=source.slice(0,start)+'    return bindImageTilt(element);'+source.slice(end);
+fs.writeFileSync('app/components/interactive.tsx',source);
+let home=fs.readFileSync('app/homepage.tsx','utf8');
+for(const key of ['eye','collageWoman','future'])home=home.replace(`className={s.${key}}`,`className={\`\${s.${key}} cursor-photo\`}`);
+home=home.replace('className={s.whyPortrait}','className={`${s.whyPortrait} cursor-portrait`}');
+fs.writeFileSync('app/homepage.tsx',home);

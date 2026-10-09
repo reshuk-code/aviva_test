@@ -1,0 +1,26 @@
+# Replace YOUR_DOCKERHUB_USERNAME after building and pushing the image.
+# Paste this file into xCloud, not the local-build docker-compose.yml.
+services:
+  aviva:
+    image: YOUR_DOCKERHUB_USERNAME/aviva-site:latest
+    pull_policy: always
+    restart: unless-stopped
+    init: true
+    ports:
+      - "4670:4670"
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+      HOSTNAME: "0.0.0.0"
+      PORT: "4670"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4670/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
