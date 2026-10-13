@@ -1,0 +1,52 @@
+/* The dialog itself stays untransformed so fixed children (the site cursor) keep viewport coordinates; only the sheet slides. */
+.panel{position:fixed;inset:0;margin:0;padding:0;border:0;width:100vw;height:100dvh;max-width:none;max-height:none;overflow:hidden;background:transparent;color:#1d1c1b;font-family:var(--font-inter),sans-serif}
+.panel::backdrop{background:#0f0d0c8c;backdrop-filter:blur(3px);opacity:0;transition:opacity .4s ease,display .4s allow-discrete,overlay .4s allow-discrete}
+.panel[open]::backdrop{opacity:1}
+@starting-style{.panel[open]::backdrop{opacity:0}}
+.sheet{position:absolute;inset:0 0 0 auto;display:flex;flex-direction:column;width:min(540px,100%);background:#fffaf1;box-shadow:-24px 0 60px #0f0d0c33;animation:sheetIn .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes sheetIn{from{translate:100% 0}to{translate:none}}
+.top{display:flex;align-items:center;justify-content:space-between;padding:26px 34px 18px}
+.panel .eyebrow{margin:0;font-size:12px;letter-spacing:.23em;text-transform:uppercase;color:#ff8a00}
+.close{position:relative;width:42px;height:42px;padding:0;border:1px solid #1d1c1b1f;border-radius:50%;background:transparent;transition:background .2s,border-color .2s,rotate .3s}
+.close span{position:absolute;left:12px;right:12px;top:50%;height:1.5px;background:#1d1c1b;rotate:45deg}
+.close span+span{rotate:-45deg}
+.close:hover{background:#ff8a00;border-color:#ff8a00;rotate:90deg}
+.form{display:flex;flex-direction:column;flex:1;min-height:0}
+.progress{height:3px;margin:0 34px;background:#1d1c1b14;border-radius:3px;overflow:hidden}
+.progress span{display:block;height:100%;background:#ff8a00;border-radius:3px;transition:width .45s cubic-bezier(.22,1,.36,1)}
+.body{flex:1;min-height:0;overflow:hidden auto;padding:30px 34px 10px;animation:stepIn .4s cubic-bezier(.22,1,.36,1) both}
+@keyframes stepIn{from{opacity:0;translate:18px 0}to{opacity:1;translate:0 0}}
+.panel .count{margin:0 0 10px;font-size:13px;color:#706b66}
+.panel .body h2,.panel .done h2{margin:0;font-size:30px;line-height:1.18;font-weight:650;letter-spacing:-.03em;outline:none}
+.panel .hint{margin:12px 0 26px;font-size:15px;line-height:1.6;color:#706b66}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{padding:12px 18px;border:1px solid #1d1c1b26;border-radius:999px;background:#fff;color:#1d1c1b;font-size:15px;line-height:1.2;transition:background .2s,border-color .2s,color .2s,translate .2s}
+.chip:hover{border-color:#ff8a00;translate:0 -2px}
+.chip[aria-pressed="true"]{background:#1b1918;border-color:#1b1918;color:#fff}
+.chip[aria-pressed="true"]::before{content:"✓";margin-right:8px;color:#ff8a00}
+.group{margin:0 0 26px;padding:0;border:0;min-width:0}
+.group legend{padding:0;margin-bottom:12px;font-size:14px;font-weight:600}
+.field{display:block;margin-bottom:18px}
+.field span{display:block;margin-bottom:8px;font-size:14px;font-weight:600}
+.field input,.field textarea{width:100%;padding:14px 16px;border:1px solid #1d1c1b26;border-radius:10px;background:#fff;color:#1d1c1b;font:inherit;font-size:16px;line-height:1.5;resize:vertical;transition:border-color .2s,box-shadow .2s}
+.field input:focus,.field textarea:focus{outline:none;border-color:#ff8a00;box-shadow:0 0 0 3px #ff8a0033}
+.field textarea::placeholder{color:#a39d96}
+.panel .error{min-height:22px;margin:6px 0 0;font-size:14px;line-height:1.5;color:#c2410c}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:18px 34px 28px;border-top:1px solid #1d1c1b12}
+.primary,.secondary,.ghost{display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:15px 24px;border-radius:999px;font-size:15px;font-weight:600;line-height:1.2;transition:background .2s,color .2s,border-color .2s}
+.primary{margin-left:auto;border:1px solid #ff8a00;background:#ff8a00;color:#1b1918}
+.primary:hover{background:#ffa31a;border-color:#ffa31a}
+.primary svg{width:15px;height:15px;transition:translate .25s}
+.primary:hover svg{translate:2px -2px}
+.secondary{border:1px solid #1d1c1b;background:transparent;color:#1d1c1b}
+.secondary:hover{background:#1b1918;color:#fff}
+.ghost{padding-inline:6px;border:0;background:transparent;color:#706b66}
+.ghost:hover{color:#1d1c1b}
+.panel button:focus-visible{outline:2px solid #1d1c1b;outline-offset:3px}
+.done{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;flex:1;padding:0 34px 60px;animation:stepIn .4s cubic-bezier(.22,1,.36,1) both}
+.tick{display:grid;place-items:center;width:64px;height:64px;margin-bottom:26px;border-radius:50%;background:#ff8a00;color:#1b1918;font-size:28px}
+.panel .done p{margin:14px 0 30px;font-size:16px;line-height:1.65;color:#706b66}
+.doneActions{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.doneActions .primary{margin-left:0}
+@media(max-width:560px){.top{padding:20px 22px 14px}.progress{margin-inline:22px}.body{padding:24px 22px 8px}.panel .body h2,.panel .done h2{font-size:25px}.actions{padding:14px 22px 22px}.actions .primary,.actions .secondary{flex:1 1 100%;margin-left:0}.actions .ghost{order:3}.done{padding-inline:22px}.chip{font-size:14px;padding:11px 15px}}
+@media(prefers-reduced-motion:reduce){.panel::backdrop,.progress span,.chip,.close{transition:none}.sheet,.body,.done{animation:none}}

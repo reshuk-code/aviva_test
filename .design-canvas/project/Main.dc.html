@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin overview</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+body{margin:0}
+a{color:#8a4a00}a:hover{color:#1d1c1b}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 1060px; background: #f6f3ee; color: #1d1c1b; font-family: Inter, system-ui, sans-serif">
+<div style="flex: 1 0 248px; max-width: 100%; background: #1b1918">
+<dc-import name="Sidebar" active="Overview" hint-size="248px,900px"></dc-import>
+</div>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 36px 40px; display: flex; flex-direction: column; gap: 28px">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+<div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 30px; line-height: 1.2; font-weight: 700; letter-spacing: -0.03em">Studio overview</h1>
+<p style="margin: 0; font-size: 15px; color: #5f5a54">Two quote requests are waiting for a reply.</p>
+</div>
+<label style="display: flex; align-items: center; gap: 10px; box-sizing: border-box; height: 46px; padding: 0 14px; flex: 0 1 280px; background: #ffffff; border: 1px solid #e3ddd4; border-radius: 12px; color: #5f5a54">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
+<input type="search" aria-label="Search content" placeholder="Search content" style="flex-grow: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 14px; color: #1d1c1b">
+</label>
+<button type="button" style="display: flex; align-items: center; gap: 10px; height: 46px; padding: 0 20px; border: 0; border-radius: 12px; font: inherit; font-size: 14px; font-weight: 600; background: {{accent}}; color: #1b1918; cursor: pointer">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+New project
+</button>
+</header>
+
+<section aria-label="Content at a glance" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px">
+<sc-for list="{{stats}}" as="stat" hint-placeholder-count="4">
+<a href="{{stat.href}}" style="display: flex; flex-direction: column; gap: 14px; padding: 22px; background: #ffffff; border: 1px solid #e7e2da; border-radius: 16px; text-decoration: none; color: #1d1c1b">
+<span style="font-size: 14px; color: #5f5a54">{{stat.label}}</span>
+<span style="font-size: 44px; line-height: 1; font-weight: 700; letter-spacing: -0.04em">{{stat.value}}</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5f5a54">
+<span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: {{stat.dot}}"></span>{{stat.detail}}
+</span>
+</a>
+</sc-for>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+<section aria-labelledby="quotes-heading" style="flex: 3 1 420px; min-width: 0; background: #ffffff; border: 1px solid #e7e2da; border-radius: 16px; display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 24px 14px">
+<h2 id="quotes-heading" style="margin: 0; font-size: 19px; font-weight: 600; letter-spacing: -0.02em">Latest quote requests</h2>
+<a href="Quotes.dc.html" style="font-size: 14px; font-weight: 500">View all</a>
+</div>
+<sc-for list="{{quotes}}" as="quote" hint-placeholder-count="3">
+<a href="Quotes.dc.html" style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 16px 24px; border-top: 1px solid #f0ece5; text-decoration: none; color: #1d1c1b">
+<span aria-hidden="true" style="width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #fdebd2; color: #6b3d00">{{quote.initials}}</span>
+<span style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<span style="display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: {{quote.weight}}">{{quote.name}}
+<sc-if value="{{quote.unread}}" hint-placeholder-val="{{false}}"><span style="padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; background: {{accent}}; color: #1b1918">New</span></sc-if>
+</span>
+<span style="font-size: 13px; color: #5f5a54">{{quote.subject}}</span>
+</span>
+<span style="padding: 5px 10px; border-radius: 8px; font-size: 12px; background: #f3efe9; color: #4a4540">{{quote.service}}</span>
+<span style="flex: 0 0 120px; text-align: right; font-size: 12px; color: #5f5a54">{{quote.date}}</span>
+</a>
+</sc-for>
+</section>
+
+<section aria-labelledby="actions-heading" style="flex: 2 1 300px; min-width: 0; box-sizing: border-box; padding: 24px; background: #1b1918; color: #f5f3ef; border-radius: 16px; display: flex; flex-direction: column; gap: 14px">
+<h2 id="actions-heading" style="margin: 0 0 4px; font-size: 19px; font-weight: 600; letter-spacing: -0.02em">Quick actions</h2>
+<sc-for list="{{actions}}" as="action" hint-placeholder-count="3">
+<button type="button" style="display: flex; align-items: center; gap: 14px; min-height: 56px; padding: 0 16px; border: 1px solid #3a3633; border-radius: 12px; background: transparent; color: #f5f3ef; font: inherit; font-size: 15px; text-align: left; cursor: pointer">
+<span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: {{accent}}; color: #1b1918">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+</span>
+<span style="flex-grow: 1">{{action}}</span>
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+</button>
+</sc-for>
+<p style="margin: auto 0 0; padding-top: 10px; font-size: 13px; line-height: 1.6; color: #b9b4ad">Preview workspace. Changes reset when the page reloads.</p>
+</section>
+</div>
+
+<section aria-labelledby="recent-heading" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<h2 id="recent-heading" style="margin: 0; font-size: 19px; font-weight: 600; letter-spacing: -0.02em">Recent projects</h2>
+<a href="Projects.dc.html" style="font-size: 14px; font-weight: 500">All projects</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<sc-for list="{{projects}}" as="project" hint-placeholder-count="4">
+<a href="Projects.dc.html" style="display: flex; flex-direction: column; background: #ffffff; border: 1px solid #e7e2da; border-radius: 16px; overflow: hidden; text-decoration: none; color: #1d1c1b">
+<img src="{{project.image}}" alt="" style="width: 100%; height: 150px; object-fit: cover; display: block">
+<span style="display: flex; flex-direction: column; gap: 8px; padding: 16px 18px 18px">
+<span style="font-size: 12px; color: #5f5a54">{{project.category}}</span>
+<span style="font-size: 15px; font-weight: 600; line-height: 1.35">{{project.title}}</span>
+<span style="align-self: flex-start; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; background: {{project.pillBg}}; color: {{project.pillColor}}">{{project.status}}</span>
+</span>
+</a>
+</sc-for>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#ff8a00","options":["#ff8a00","#efbf59","#f26a4b"]},"$preview":{"width":1440,"height":1060}}'>
+class Component extends DCLogic {
+renderVals() {
+const pill = (status) => status === 'Published' ? { pillBg: '#e3f3ea', pillColor: '#17603b' } : { pillBg: '#efece7', pillColor: '#4a4540' };
+return {
+accent: this.props.accent ?? '#ff8a00',
+stats: [
+{ label: 'Projects', value: '04', detail: '3 published, 1 draft', dot: '#1f7a4d', href: 'Projects.dc.html' },
+{ label: 'Blog posts', value: '03', detail: '2 published, 1 draft', dot: '#1f7a4d', href: '#blog' },
+{ label: 'Quote requests', value: '03', detail: '2 unread', dot: '#c2410c', href: 'Quotes.dc.html' },
+{ label: 'Team members', value: '04', detail: 'All profiles published', dot: '#1f7a4d', href: '#team' }
+],
+quotes: [
+{ initials: 'SC', name: 'Sophie Chen', subject: 'A fresh identity for our studio', service: 'Brand identity', date: 'Today, 10:24 AM', unread: true, weight: 600 },
+{ initials: 'JW', name: 'James Wilson', subject: 'Let’s talk about a new website', service: 'Web design', date: 'Yesterday, 3:45 PM', unread: true, weight: 600 },
+{ initials: 'AS', name: 'Aarav Sharma', subject: 'Campaign collaboration', service: 'Marketing', date: 'Oct 07, 2026', unread: false, weight: 500 }
+],
+actions: ['Add a project', 'Write a blog post', 'Add a team member'],
+projects: [
+{ title: 'Classic Concrete Planters', category: 'Branding · Photography', status: 'Published', image: '/_blob/494a28ab2edfe5ad67865f572c507870' },
+{ title: 'The Shape of an Idea', category: 'Art direction · Branding', status: 'Published', image: '/_blob/bb1066dcc058831d081037cec5df1d1d' },
+{ title: 'A Moment in Time', category: 'Digital · Photography', status: 'Published', image: '/_blob/6e2490cae36faa20aaf1467c6a77b1b0' },
+{ title: 'Beyond the Ordinary', category: 'Campaign · Branding', status: 'Draft', image: '/_blob/ef960dda8054abc650e7cbfb8322ac10' }
+].map((project) => ({ ...project, ...pill(project.status) }))
+};
+}
+}
+</script>
+</body>
+</html>

@@ -229,3 +229,96 @@
 @keyframes messageFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
 @media(prefers-reduced-motion:no-preference){.footerCta{animation:messageFloat 4s ease-in-out infinite}}
 @media(prefers-reduced-motion:reduce){.footerCta,.footerCta::after,.footerCta svg{transition:none}.footerCta:hover,.footerCta:focus-visible{scale:1}.footerCta:hover svg,.footerCta:focus-visible svg{translate:none}}
+
+/* Updated homepage: centred navigation and the skills block inside the stats panel. */
+.skills{position:relative;margin-top:45px}
+.skillsHeading h2{font-size:20px;font-weight:700;line-height:1.15;text-transform:uppercase;letter-spacing:0;text-align:center}
+.skillsIntro{display:flex;flex-direction:column;align-items:center;gap:18px;margin-top:16px;text-align:center}
+.skillsIntro p{font-size:12px;line-height:1.6;color:#b3b3b3}
+.skillsLink{display:inline-flex;align-items:center;gap:12px;padding-bottom:9px;border-bottom:1px solid #ff8a00;color:#ff8a00;font-size:11px;font-weight:700;text-transform:uppercase;white-space:nowrap}
+.skillsLink svg{width:13px;height:13px;transition:translate .2s}
+.skillsLink:hover svg{translate:2px -2px}
+.skillPills{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;list-style:none;padding:0;margin:28px 0 0}
+.skill{display:flex;align-items:center;gap:7px;height:32px;padding:0 13px;border-radius:16px;background:#090808;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;transition:scale .3s cubic-bezier(.22,1,.36,1),background .3s}
+.skill img{width:14px;height:14px}
+.skill:hover{scale:1.06;background:#000}
+.skillsTorus{display:none}
+@media(max-width:700px){.page :global(.navigation a:not([href^="mailto"])){display:none}}
+@media(min-width:701px){
+ .page :global(.navigation){position:absolute;left:51.25%;translate:-50%;margin:0;gap:calc(56 * var(--u))}
+ .page :global(.navigation a){color:#553800;white-space:nowrap}
+ .page :global(.header-actions){margin-left:auto}
+ .stats{padding-bottom:calc(146 * var(--u))}
+ .statsRing{left:calc(45 * var(--u));top:calc(346 * var(--u));bottom:auto;width:calc(225 * var(--u));height:calc(225 * var(--u))}
+ .skills{margin-top:calc(88 * var(--u))}
+ .skillsHeading{display:flex;align-items:flex-end;justify-content:center;width:calc(698 * var(--u));height:calc(185 * var(--u));margin-left:calc(315 * var(--u));padding:0 calc(40 * var(--u)) calc(14 * var(--u)) 0;border:1px solid #33341c;border-color:transparent #33341c #33341c transparent;border-radius:0 calc(40 * var(--u)) calc(40 * var(--u)) 0}
+ .skillsHeading h2{font-size:calc(40 * var(--u));white-space:nowrap}
+ .skillsIntro{flex-direction:row;align-items:flex-start;gap:calc(55 * var(--u));width:calc(700 * var(--u));height:calc(241 * var(--u));margin:-1px 0 0 calc(273 * var(--u));padding:calc(43 * var(--u)) 0 0 calc(48 * var(--u));text-align:left;border:1px solid #33341c;border-color:#33341c transparent transparent #33341c;border-radius:calc(40 * var(--u)) 0 0 calc(40 * var(--u))}
+ .skillsIntro p{width:calc(450 * var(--u));flex:none;font-size:calc(16.5 * var(--u));line-height:1.47}
+ .skillsLink{gap:calc(16 * var(--u));padding-bottom:calc(12 * var(--u));font-size:calc(14 * var(--u))}
+ .skillsLink svg{width:calc(14 * var(--u));height:calc(14 * var(--u))}
+ .skillPills{position:relative;left:50%;translate:-50%;flex-wrap:nowrap;align-items:flex-end;gap:calc(2 * var(--u));width:max-content;height:calc(150 * var(--u));margin-top:calc(-20 * var(--u));border-bottom:1px solid #343131}
+ .skill{gap:calc(10 * var(--u));height:calc(48 * var(--u));padding:0 calc(24 * var(--u));border-radius:calc(24 * var(--u));font-size:calc(17 * var(--u))}
+ .skill img{width:calc(22 * var(--u));height:calc(22 * var(--u))}
+ .skillLoose{position:absolute;left:var(--x);top:calc(var(--y) * var(--u));translate:-50% -50%}
+ .skillTilted{rotate:-33deg}
+ .skill:nth-child(3){margin-left:calc(80 * var(--u))}
+ .skillsTorus{display:block;position:absolute;left:calc(1255 * var(--u));top:calc(190 * var(--u));width:calc(165 * var(--u));aspect-ratio:149/132;background:url('/images/skills-ring.png') center/contain no-repeat;pointer-events:none}
+}
+@media(prefers-reduced-motion:reduce){.skill,.skillsLink svg{transition:none}}
+
+/* The top button slides out on hover; this strip keeps it joined to the screen edge. */
+.page :global(.back-to-top)::after{content:"";position:absolute;left:100%;top:0;bottom:0;width:8px;background:inherit}
+/* Message circle rolls in from the right with the footer and rolls back out when it leaves. */
+.footer{overflow-x:clip}
+.footerCtaSlot{display:flex;align-items:flex-start;justify-content:flex-end;--roll-distance:calc(955 * var(--u));--roll-turn:720deg}
+.footerCtaSlot>a{transition:transform 1.25s cubic-bezier(.22,1,.36,1),opacity .35s,scale .4s cubic-bezier(.22,1,.36,1),background .3s,box-shadow .4s}
+.footerCtaSlot[data-roll="out"]>a{transform:translateX(var(--roll-distance)) rotate(var(--roll-turn));opacity:0;pointer-events:none;transition:transform .9s cubic-bezier(.55,0,.8,.4),opacity .3s .6s}
+@media(max-width:700px){.footerCtaSlot{--roll-distance:314px;--roll-turn:360deg}}
+@media(prefers-reduced-motion:reduce){.footerCtaSlot>a,.footerCtaSlot[data-roll="out"]>a{transform:none;opacity:1;pointer-events:auto;transition:none}}
+
+/* Skill pills: lift, straighten and glow in the brand colour while the others step back. */
+.skill{overflow:hidden;transition:scale .35s cubic-bezier(.22,1,.36,1),translate .35s cubic-bezier(.22,1,.36,1),rotate .45s cubic-bezier(.22,1,.36,1),background .3s,box-shadow .35s,opacity .3s}
+.skill:not(.skillLoose){position:relative}
+.skill img{transition:transform .45s cubic-bezier(.22,1,.36,1),filter .35s}
+.skill::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(110deg,transparent 30%,#ffffff2e 50%,transparent 70%);translate:-120% 0;pointer-events:none}
+@media(max-width:700px){.skillLoose{position:relative}}
+@media(hover:hover) and (pointer:fine){
+ .skillPills:hover .skill:not(:hover){opacity:.5}
+ .skill:hover{z-index:2;scale:1.08;translate:0 -6px;background:#000;box-shadow:inset 0 0 0 1px var(--c),0 12px 28px -10px var(--c)}
+ .skill:hover img{transform:rotate(-14deg) scale(1.28);filter:drop-shadow(0 0 6px var(--c))}
+ .skill:hover::after{translate:120% 0;transition:translate .7s ease}
+}
+@media(hover:hover) and (pointer:fine) and (min-width:701px){.skillLoose:hover{translate:-50% calc(-50% - 6px)}.skillTilted:hover{rotate:0deg}}
+@media(prefers-reduced-motion:reduce){.skill,.skill img,.skill::after{transition:none}.skill:hover{scale:1;translate:none}.skillLoose:hover{translate:-50% -50%}.skillTilted:hover{rotate:-33deg}.skill:hover img{transform:none}.skill:hover::after{translate:-120% 0}}
+
+/* Slightly larger hero sculpture. */
+@media(min-width:701px){.heroArtwork{width:calc(552 * var(--u));height:calc(602 * var(--u));top:0;right:calc(34 * var(--u))}}
+
+/* Header net measured from the design: wider, flatter and lower than the artwork's own proportions. */
+@media(min-width:701px){.page :global(.header-ocean-wave){left:calc(540 * var(--u));top:calc(85 * var(--u));width:calc(835 * var(--u));height:calc(240 * var(--u))}}
+@media(max-width:700px){.page :global(.header-ocean-wave){height:28vw}}
+/* Header links scale with the page, which left them only 6-9px tall on phones and tablets: keep the text readable and give each link a finger-sized tap area. */
+.page :global(.navigation a)::before{content:"";position:absolute;inset:-17px -10px}
+.page :global(.navigation a){font-size:max(11px,calc(16 * var(--u)))}
+.page :global(.menu-button){position:relative}
+.page :global(.menu-button)::after{content:"";position:absolute;inset:-12px}
+.footerWhatsapp{width:max(18px,calc(24 * var(--u)));height:max(18px,calc(24 * var(--u)));flex:none}
+/* Room for the plus sign beside the 17. */
+@media(min-width:701px){.experience{gap:calc(48 * var(--u))}}
+
+/* Skill pills drop from the top of the panel, hit, bounce and settle, one after another. */
+.skill{--tx:0px;--ty:0px;--rot:0deg;--drop:520px}
+.skillPills[data-drop="waiting"] .skill{opacity:0}
+.skillPills[data-drop="go"] .skill{animation:pillDrop 1.25s linear var(--delay,0ms) backwards}
+@media(min-width:701px){.skill{--drop:calc(900 * var(--u))}.skillLoose{--tx:-50%;--ty:-50%}.skillTilted{--rot:-33deg}}
+@keyframes pillDrop{
+ 0%{translate:var(--tx) calc(var(--ty) - var(--drop));rotate:calc(var(--rot) + var(--spin));opacity:0;animation-timing-function:cubic-bezier(.5,0,1,.55)}
+ 6%{opacity:1}
+ 58%{translate:var(--tx) var(--ty);rotate:calc(var(--rot) - var(--spin) * .15);scale:1.06 .9;animation-timing-function:cubic-bezier(.2,.7,.4,1)}
+ 72%{translate:var(--tx) calc(var(--ty) - 30px);rotate:calc(var(--rot) + var(--spin) * .08);scale:1;animation-timing-function:cubic-bezier(.5,0,.9,.5)}
+ 84%{translate:var(--tx) var(--ty);rotate:calc(var(--rot) - var(--spin) * .03);scale:1.03 .96;animation-timing-function:cubic-bezier(.2,.7,.4,1)}
+ 92%{translate:var(--tx) calc(var(--ty) - 8px);scale:1;animation-timing-function:cubic-bezier(.5,0,.9,.5)}
+ 100%{translate:var(--tx) var(--ty);rotate:var(--rot);scale:1;opacity:1}
+}
+@media(prefers-reduced-motion:reduce){.skillPills[data-drop] .skill{animation:none;opacity:1}}

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin sidebar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<nav aria-label="Admin navigation" style="box-sizing: border-box; width: 100%; min-height: 900px; padding: 28px 16px 20px; display: flex; flex-direction: column; gap: 28px; background: #1b1918; color: #f5f3ef; font-family: Inter, system-ui, sans-serif">
+<div style="display: flex; align-items: baseline; gap: 10px; padding: 0 12px">
+<span style="font-size: 22px; font-weight: 700; letter-spacing: 0.04em; color: #ff8a00">AVIVA</span>
+<span style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #b9b4ad">Admin</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="padding: 0 12px 8px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #a39d95">Content</div>
+<sc-for list="{{items}}" as="item" hint-placeholder-count="6">
+<a href="{{item.href}}" aria-current="{{item.current}}" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 12px; border-radius: 10px; text-decoration: none; font-size: 14px; font-weight: {{item.weight}}; background: {{item.bg}}; color: {{item.color}}">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="{{item.icon}}"></path></svg>
+<span style="flex-grow: 1">{{item.label}}</span>
+<sc-if value="{{item.count}}" hint-placeholder-val="{{false}}">
+<span style="min-width: 22px; height: 22px; box-sizing: border-box; padding: 0 6px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; background: {{item.badgeBg}}; color: {{item.badgeColor}}">{{item.count}}</span>
+</sc-if>
+</a>
+</sc-for>
+</div>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 14px">
+<a href="https://example.com" style="display: flex; align-items: center; gap: 12px; min-height: 46px; padding: 0 12px; border: 1px solid #3a3633; border-radius: 10px; text-decoration: none; font-size: 14px; color: #f5f3ef">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+<span>View live website</span>
+</a>
+<div style="display: flex; align-items: center; gap: 12px; padding: 14px 12px 0; border-top: 1px solid #33302d">
+<span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; background: #ff8a00; color: #1b1918">A</span>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 14px; font-weight: 500">Studio admin</span>
+<span style="font-size: 12px; color: #b9b4ad">Design preview</span>
+</div>
+</div>
+</div>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["Overview","Projects","Blog posts","Team members","Quote requests","Settings"],"default":"Overview"},"$preview":{"width":248,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+const active = this.props.active ?? 'Overview';
+const nav = [
+{ label: 'Overview', href: 'Main.dc.html', icon: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z' },
+{ label: 'Projects', href: 'Projects.dc.html', icon: 'M3 7V5a2 2 0 0 1 2-2h5l3 4h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z' },
+{ label: 'Blog posts', href: '#blog', icon: 'M6 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2ZM8 8h8M8 12h8M8 16h5' },
+{ label: 'Team members', href: '#team', icon: 'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3 21v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6M18 15a5 5 0 0 1 3 4v2' },
+{ label: 'Quote requests', href: 'Quotes.dc.html', count: '2', icon: 'M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2ZM3 7l9 6 9-6' },
+{ label: 'Settings', href: '#settings', icon: 'M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M16 4v4M10 10v4M18 16v4' }
+];
+return { items: nav.map((item) => {
+const on = item.label === active;
+return { ...item, current: on ? 'page' : 'false', weight: on ? 600 : 400, bg: on ? '#ff8a00' : 'transparent', color: on ? '#1b1918' : '#d9d5cf', badgeBg: on ? '#1b1918' : '#ff8a00', badgeColor: on ? '#ffffff' : '#1b1918' };
+}) };
+}
+}
+</script>
+</body>
+</html>

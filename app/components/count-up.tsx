@@ -17,10 +17,8 @@ export function CountUp({ value, suffix = "", as: Tag = "strong" }: { value: num
     number.textContent = `0${suffix}`;
     const observer = new IntersectionObserver(([entry]) => {
       if (complete) return;
-      if (!entry.isIntersecting || entry.intersectionRatio < .6) {
-        cancelAnimationFrame(frame); started = false; number.textContent = `0${suffix}`; return;
-      }
-      if (started) return;
+      // Plays once: after it starts, scrolling away never resets or restarts the count.
+      if (started || !entry.isIntersecting || entry.intersectionRatio < .6) return;
       started = true;
       let start = 0;
       const tick = (now: number) => {

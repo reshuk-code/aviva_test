@@ -39,6 +39,39 @@ export function Reveal({ children, className = "" }: { children: ReactNode; clas
   return <div ref={ref} className={`reveal ${className}`}>{children}</div>;
 }
 
+// Rolls its link in from the right while the slot is on screen and back out when it leaves.
+export function RollingLink({ href, className = "", slotClassName = "", children }: { href: string; className?: string; slotClassName?: string; children: ReactNode }) {
+  const slot = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const element = slot.current;
+    if (!element || !("IntersectionObserver" in window)) return;
+    // Leave the link in place until hydration so it is never lost without scripting.
+    element.dataset.roll = "out";
+    const observer = new IntersectionObserver(([entry]) => { element.dataset.roll = entry.isIntersecting ? "in" : "out"; }, { threshold: .55 });
+    observer.observe(element);
+    return () => { observer.disconnect(); delete element.dataset.roll; };
+  }, []);
+  return <span ref={slot} className={`rolling-slot ${slotClassName}`}><a href={href} className={className}>{children}</a></span>;
+}
+
+// Marks its list "waiting" until it first scrolls in, then "go", so CSS can play a drop-in once.
+export function DropList({ className = "", labelledBy, children }: { className?: string; labelledBy?: string; children: ReactNode }) {
+  const list = useRef<HTMLUListElement>(null);
+  useEffect(() => {
+    const element = list.current;
+    if (!element || !("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    element.dataset.drop = "waiting";
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.intersectionRatio < .35) return;
+      element.dataset.drop = "go";
+      observer.disconnect();
+    }, { threshold: .35 });
+    observer.observe(element);
+    return () => { observer.disconnect(); delete element.dataset.drop; };
+  }, []);
+  return <ul ref={list} className={className} aria-labelledby={labelledBy}>{children}</ul>;
+}
+
 export function ScrollEffects() {
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");

@@ -4,7 +4,11 @@ import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { Arrow, Logo } from "./design";
 
 const navigation = [
-  { label: "Get quote", href: "mailto:avivanepal@example.com?subject=Project%20quote" },
+  { label: "Home", href: "#home" },
+  { label: "Services", href: "#services" },
+  { label: "Our works", href: "#projects" },
+  { label: "Get quote", href: "mailto:avivanepal@example.com?subject=Project%20quote", quote: true },
+  { label: "Contact", href: "#contact" },
 ];
 
 const primaryLinks = [
@@ -106,9 +110,9 @@ export function Header() {
       <div className="header-brand"><Logo /></div>
       <span className="header-tagline">The team behind your team<span>- Since 2007</span></span>
       <nav aria-label="Main navigation" className="navigation">
-        {navigation.map((link) => <a key={link.label} href={link.href}>{link.label}</a>)}
+        {navigation.map((link) => <a key={link.label} href={link.href} data-quote={link.quote ? "" : undefined}>{link.label}</a>)}
       </nav>
-      <div className="header-actions"><span className="header-menu-label" aria-hidden="true">Menu</span><button type="button" className="menu-button" aria-label="Open navigation" aria-haspopup="dialog" aria-controls="fullscreen-navigation" aria-expanded={open} onClick={() => setOpen(true)}>
+      <div className="header-actions"><button type="button" className="menu-button" aria-label="Open navigation" aria-haspopup="dialog" aria-controls="fullscreen-navigation" aria-expanded={open} onClick={() => setOpen(true)}>
         {Array.from({ length: 9 }, (_, index) => <span key={index} />)}
       </button></div>
 

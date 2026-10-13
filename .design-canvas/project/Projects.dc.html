@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin projects</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+body{margin:0}
+a{color:#8a4a00}a:hover{color:#1d1c1b}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 1060px; background: #f6f3ee; color: #1d1c1b; font-family: Inter, system-ui, sans-serif">
+<div style="flex: 1 0 248px; max-width: 100%; background: #1b1918">
+<dc-import name="Sidebar" active="Projects" hint-size="248px,900px"></dc-import>
+</div>
+<main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 36px 40px; display: flex; flex-direction: column; gap: 24px">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+<div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 30px; line-height: 1.2; font-weight: 700; letter-spacing: -0.03em">Projects</h1>
+<p style="margin: 0; font-size: 15px; color: #5f5a54">The work shown in the portfolio section of the website.</p>
+</div>
+<button type="button" style="display: flex; align-items: center; gap: 10px; height: 46px; padding: 0 20px; border: 0; border-radius: 12px; font: inherit; font-size: 14px; font-weight: 600; background: #ff8a00; color: #1b1918; cursor: pointer">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+New project
+</button>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<div role="group" aria-label="Filter by status" style="display: flex; flex-wrap: wrap; gap: 6px; padding: 5px; background: #ffffff; border: 1px solid #e7e2da; border-radius: 14px">
+<sc-for list="{{filters}}" as="filter" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{filter.pressed}}" onClick="{{filter.pick}}" style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 0; border-radius: 10px; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; background: {{filter.bg}}; color: {{filter.color}}">{{filter.label}}
+<span style="min-width: 22px; padding: 2px 6px; border-radius: 8px; font-size: 12px; text-align: center; background: {{filter.countBg}}; color: {{filter.countColor}}">{{filter.count}}</span>
+</button>
+</sc-for>
+</div>
+<label style="margin-left: auto; display: flex; align-items: center; gap: 10px; box-sizing: border-box; height: 46px; padding: 0 14px; flex: 0 1 280px; background: #ffffff; border: 1px solid #e3ddd4; border-radius: 12px; color: #5f5a54">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
+<input type="search" aria-label="Search projects" placeholder="Search projects" style="flex-grow: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 14px; color: #1d1c1b">
+</label>
+</div>
+
+<section aria-label="Project list" style="background: #ffffff; border: 1px solid #e7e2da; border-radius: 16px; overflow: hidden">
+<div style="overflow-x: auto">
+<table style="width: 100%; min-width: 720px; border-collapse: collapse; text-align: left; font-size: 14px">
+<thead>
+<tr style="background: #faf8f4; color: #5f5a54">
+<th scope="col" style="padding: 14px 24px; font-size: 13px; font-weight: 500">Project</th>
+<th scope="col" style="padding: 14px 16px; font-size: 13px; font-weight: 500">Category</th>
+<th scope="col" style="padding: 14px 16px; font-size: 13px; font-weight: 500">Status</th>
+<th scope="col" style="padding: 14px 16px; font-size: 13px; font-weight: 500">Last updated</th>
+<th scope="col" style="padding: 14px 24px; font-size: 13px; font-weight: 500; text-align: right">Actions</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{rows}}" as="row" hint-placeholder-count="4">
+<tr style="border-top: 1px solid #f0ece5">
+<td style="padding: 14px 24px">
+<span style="display: flex; align-items: center; gap: 14px">
+<img src="{{row.image}}" alt="" style="width: 56px; height: 56px; border-radius: 10px; object-fit: cover; flex: none">
+<span style="font-size: 15px; font-weight: 600">{{row.title}}</span>
+</span>
+</td>
+<td style="padding: 14px 16px; color: #5f5a54">{{row.category}}</td>
+<td style="padding: 14px 16px"><span style="padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; white-space: nowrap; background: {{row.pillBg}}; color: {{row.pillColor}}">{{row.status}}</span></td>
+<td style="padding: 14px 16px; color: #5f5a54; white-space: nowrap">{{row.date}}</td>
+<td style="padding: 14px 24px; text-align: right; white-space: nowrap">
+<button type="button" aria-label="{{row.editLabel}}" style="width: 44px; height: 44px; border: 1px solid #e3ddd4; border-radius: 10px; background: #ffffff; color: #1d1c1b; cursor: pointer">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m14 5 5 5M4 20l5-1L21 7a2 2 0 0 0-4-4L5 15l-1 5Z"></path></svg>
+</button>
+</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div style="padding: 16px 24px; border-top: 1px solid #f0ece5; font-size: 13px; color: #5f5a54">Showing {{shown}} of 4 projects</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1060}}'>
+class Component extends DCLogic {
+renderVals() {
+const picked = (this.state && this.state.filter) || 'All';
+const all = [
+{ title: 'Classic Concrete Planters', category: 'Branding · Photography', status: 'Published', date: 'Oct 08, 2026', image: '/_blob/494a28ab2edfe5ad67865f572c507870' },
+{ title: 'The Shape of an Idea', category: 'Art direction · Branding', status: 'Published', date: 'Oct 06, 2026', image: '/_blob/bb1066dcc058831d081037cec5df1d1d' },
+{ title: 'A Moment in Time', category: 'Digital · Photography', status: 'Published', date: 'Oct 04, 2026', image: '/_blob/6e2490cae36faa20aaf1467c6a77b1b0' },
+{ title: 'Beyond the Ordinary', category: 'Campaign · Branding', status: 'Draft', date: 'Oct 02, 2026', image: '/_blob/ef960dda8054abc650e7cbfb8322ac10' }
+];
+const rows = all.filter((row) => picked === 'All' || row.status === picked).map((row) => ({ ...row, editLabel: 'Edit ' + row.title, pillBg: row.status === 'Published' ? '#e3f3ea' : '#efece7', pillColor: row.status === 'Published' ? '#17603b' : '#4a4540' }));
+const filters = ['All', 'Published', 'Draft'].map((label) => {
+const on = label === picked;
+return { label, pressed: on ? 'true' : 'false', count: String(all.filter((row) => label === 'All' || row.status === label).length), bg: on ? '#1b1918' : 'transparent', color: on ? '#ffffff' : '#4a4540', countBg: on ? '#ff8a00' : '#f0ece5', countColor: on ? '#1b1918' : '#4a4540', pick: () => this.setState({ filter: label }) };
+});
+return { rows, filters, shown: String(rows.length) };
+}
+}
+</script>
+</body>
+</html>
