@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { CSSProperties, MouseEventHandler, ReactNode } from "react";
 
 export function Art({ name, className = "", alt = "", style }: { name: string; className?: string; alt?: string; style?: CSSProperties }) {
-  return <span className={`art ${className}`} style={style}><Image src={`/images/${name}.webp`} alt={alt} fill sizes="(max-width: 700px) 90vw, 45vw" className="object-contain" /></span>;
+  return <span className={`art ${className}`} style={style}><Image src={`/images/${name}.webp`} alt={alt} fill sizes="(max-width: 900px) 90vw, 45vw" className="object-contain" /></span>;
 }
 export function Arrow({ className = "" }: { className?: string }) {
   return <svg className={`arrow ${className}`} width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>;
@@ -10,8 +10,8 @@ export function Arrow({ className = "" }: { className?: string }) {
 export function Eyebrow({ children }: { children: ReactNode }) {
   return <p className="eyebrow">{children}<Arrow /></p>;
 }
-export function Logo({ monochrome = false, onClick }: { monochrome?: boolean; onClick?: MouseEventHandler<HTMLAnchorElement> }) {
-  return <a href="#home" className={`logo ${monochrome ? "logo-white" : ""}`} aria-label="Aviva home" onClick={onClick}>{monochrome ? <><Art name="image-211" /><span>AVIVA</span></> : <Image src="/images/aviva-logo.svg" alt="Aviva Web Technology" width={152} height={85} unoptimized preload />}</a>;
+export function Logo({ monochrome = false, href = "#home", onClick }: { monochrome?: boolean; href?: string; onClick?: MouseEventHandler<HTMLAnchorElement> }) {
+  return <a href={href} className={`logo ${monochrome ? "logo-white" : ""}`} aria-label="Aviva home" onClick={onClick}>{monochrome ? <><Art name="image-211" /><span>AVIVA</span></> : <Image src="/images/aviva-logo.svg" alt="Aviva Web Technology" width={152} height={85} unoptimized preload />}</a>;
 }
 export function Fingerprint({ className = "" }: { className?: string }) {
   return <svg className={`fingerprint ${className}`} viewBox="0 0 500 500" fill="none" aria-hidden="true">{Array.from({ length: 24 }, (_, i) => <path key={i} transform={`translate(250 250) scale(${1 - i * .038}) translate(-250 -250)`} d="M249 13C303 2 332 45 372 50S445 39 464 91S438 165 467 202S500 253 475 294S450 339 444 390S377 411 348 450S272 484 233 466S173 492 136 459S122 399 72 385S26 326 39 286S5 217 31 178S88 161 100 110S167 76 192 42S218 19 249 13Z" stroke="currentColor" strokeWidth="1.25" />)}</svg>;

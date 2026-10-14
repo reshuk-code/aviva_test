@@ -88,7 +88,7 @@ html[data-theme="light"] .gold-circle:hover,html[data-theme="light"] .gold-circl
 html[data-theme="light"] .award-icon{background:#ecd7aa}
 html[data-theme="light"] .footer .logo-white .art img{filter:invert(1)}
 html[data-theme="light"] .project-image::after{background:radial-gradient(circle at var(--shine-x,50%) var(--shine-y,50%),#ffffff24,transparent 60%)}
-@media(max-width:700px){
+@media(max-width:900px){
   .header-actions{gap:16px}
   .theme-toggle{width:32px;height:32px}
   .theme-toggle svg{width:17px;height:17px}

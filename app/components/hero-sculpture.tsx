@@ -128,7 +128,7 @@ export function HeroSculpture({ className }: { className: string }) {
     return () => { disposed = true; release(); };
   }, []);
   return <div ref={host} className={`${className} hero-sculpture`} role="img" aria-label="Interactive folded rainbow sculpture, drag to rotate">
-    <Image className="sculpture-fallback" src="/images/image-187.webp" alt="" fill sizes="(max-width: 700px) 160px, 28vw" />
+    <Image className="sculpture-fallback" src="/images/image-187.webp" alt="" fill sizes="(max-width: 900px) 160px, 28vw" />
     <svg className="sculpture-backdrop" viewBox="0 0 500 550" aria-hidden="true"><defs><linearGradient id="sculpture-berry" x2=".8" y2="1"><stop stopColor="#8d0938"/><stop offset="1" stopColor="#c51362"/></linearGradient></defs><path fill="url(#sculpture-berry)" d="M88 128C158 126 158 26 211 21C253 13 275 71 328 95C420 136 462 172 471 279C488 424 416 516 315 533C231 551 206 489 159 449C122 416 8 411 14 361C19 311 78 298 73 237C69 186 52 134 88 128Z"/><ellipse cx="117" cy="58" rx="26" ry="36" fill="#8d0938"/></svg>
   </div>;
 }

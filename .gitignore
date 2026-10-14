@@ -20,6 +20,9 @@
 # production
 /build
 
+# quote and contact requests saved by the site
+/data/
+
 # misc
 .DS_Store
 *.pem

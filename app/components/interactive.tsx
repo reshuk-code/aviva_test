@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { bindImageTilt } from "./image-tilt";
 import { Arrow, Art } from "./design";
@@ -91,7 +92,7 @@ export function ScrollEffects() {
     let dirty = true, lastTime = 0;
     const measure = () => {
       const viewportHeight = window.innerHeight;
-      const mobileFactor = window.innerWidth <= 700 ? .4 : 1;
+      const mobileFactor = window.innerWidth <= 900 ? .4 : 1;
       for (const target of targets) {
         const bounds = target.anchor.getBoundingClientRect();
         target.visible = bounds.bottom >= -100 && bounds.top <= viewportHeight + 100;
@@ -198,41 +199,27 @@ function Modal({ open, onClose, title, children, className = "" }: { open: boole
   return <dialog ref={ref} aria-label={title} onCancel={onClose} onClick={(event) => { if (event.target === event.currentTarget) onClose(); }} className={`detail-modal ${className}`}><button className="modal-close" type="button" aria-label="Close dialog" onClick={onClose}>×</button>{open && children}</dialog>;
 }
 
-type Project = { image: string; category: string; title: string; description: string };
+type Project = { slug: string; image: string; category: string; title: string; description: string };
 export function ProjectCard({ project, showTitle = true }: { project: Project; showTitle?: boolean }) {
-  const [open, setOpen] = useState(false);
-  const card = useRef<HTMLButtonElement>(null);
+  const card = useRef<HTMLAnchorElement>(null);
   useEffect(() => {
     const element = card.current;
     if (!element) return;
     return bindImageTilt(element);
   }, []);
   return (
-    <>
-      <button ref={card} type="button" onClick={() => setOpen(true)} className="project-card" aria-label={`View ${project.title}`}>
-        <div className="project-image">
-          <Image src={`/images/${project.image}.webp`} alt={project.description} fill sizes="(max-width: 700px) 90vw, 42vw" className="object-cover" />
-        </div>
-        <div className="project-caption">
-          <p>{project.category}</p>
-          {showTitle && <h3>{project.title}</h3>}
-          <span className="art project-arrow" aria-hidden="true">
-            <Image src="/images/project-arrow.svg" alt="" fill sizes="29px" className="object-contain" />
-          </span>
-        </div>
-      </button>
-      <Modal open={open} onClose={() => setOpen(false)} title={project.title}>
-        <div className="modal-project-image">
-          <Image src={`/images/${project.image}.webp`} alt={project.title} fill sizes="80vw" className="object-contain" />
-        </div>
-        <div className="modal-copy">
-          <p className="eyebrow">{project.category}</p>
-          <h2>{project.title}</h2>
-          <p>{project.description}</p>
-          <a href="mailto:avivanepal@example.com" className="gold-link">Let’s create something together <Arrow /></a>
-        </div>
-      </Modal>
-    </>
+    <Link ref={card} href={`/portfolio/${project.slug}`} className="project-card" aria-label={`View project: ${project.title}, ${project.category}`}>
+      <div className="project-image">
+        <Image src={project.image} alt={project.description || project.title} fill sizes="(max-width: 900px) 90vw, 42vw" className="object-cover" />
+      </div>
+      <div className="project-caption">
+        <p>{project.category}</p>
+        {showTitle && <h3>{project.title}</h3>}
+        <span className="art project-arrow" aria-hidden="true">
+          <Image src="/images/project-arrow.svg" alt="" fill sizes="29px" className="object-contain" />
+        </span>
+      </div>
+    </Link>
   );
 }
 
@@ -247,10 +234,9 @@ export function Testimonials() {
   return <div className="testimonial-panel"><div className="testimonial-avatars">{reviews.map((item, index) => <button key={item.name} type="button" onClick={() => setActive(index)} className={active === index ? "active" : ""} aria-label={`Read ${item.name}'s testimonial`} aria-pressed={active === index}><Art name={item.image} alt={item.name} /></button>)}</div><div className="testimonial-copy" aria-live="polite"><blockquote>{review.text}</blockquote><h3>{review.name}</h3><p>{review.role}</p><div className="testimonial-controls"><button type="button" aria-label="Previous testimonial" onClick={() => setActive((active + 2) % 3)}>‹</button><button type="button" aria-label="Next testimonial" onClick={() => setActive((active + 1) % 3)}>›</button></div></div><Art name="vector-1" className="testimonial-quote" /></div>;
 }
 
-type Article = { image: string; date: string; title: string; text: string };
+type Article = { slug: string; image: string; date: string; title: string };
 export function BlogCard({ article, hasArrow }: { article: Article; hasArrow: boolean }) {
-  const [open, setOpen] = useState(false);
-  return <><button type="button" className="blog-card" onClick={() => setOpen(true)}><p>{article.date}</p><h3>{article.title}</h3><div className="blog-image"><Image src={`/images/${article.image}.webp`} alt={article.title} fill sizes="(max-width: 700px) 90vw, 28vw" className="object-cover" /></div>{hasArrow && <span className="blog-arrow gold-circle"><Arrow /></span>}</button><Modal open={open} onClose={() => setOpen(false)} title={article.title}><div className="article-modal-image"><Image src={`/images/${article.image}.webp`} alt={article.title} fill sizes="80vw" className="object-cover" /></div><div className="modal-copy"><p className="eyebrow">{article.date} · Insights</p><h2>{article.title}</h2><p>{article.text}</p><a href="mailto:avivanepal@example.com" className="gold-link">Talk to our creative team <Arrow /></a></div></Modal></>;
+  return <Link href={`/blog/${article.slug}`} className="blog-card"><p>{article.date}</p><h3>{article.title}</h3><div className="blog-image"><Image src={article.image} alt={article.title} fill sizes="(max-width: 900px) 90vw, 28vw" className="object-cover" /></div>{hasArrow && <span className="blog-arrow gold-circle"><Arrow /></span>}</Link>;
 }
 
 const filmScenes = [{ image: "studio-team.jpg", label: "A little curiosity.", caption: "Inside the Aviva studio" }, { image: "image-192.webp", label: "A different perspective.", caption: "Art, imagination & expression" }, { image: "image-206.webp", label: "Ideas brought to life.", caption: "Design without boundaries" }, { image: "studio-meeting.jpg", label: "Better, together.", caption: "Let’s create your next chapter" }];
@@ -263,5 +249,5 @@ export function StudioFilm() {
     const timer = window.setInterval(() => setScene((value) => (value + 1) % filmScenes.length), 4500);
     return () => window.clearInterval(timer);
   }, [open, paused]);
-  return <><section className="studio-film" aria-label="Inside the creative studio"><Image src="/images/studio-team.jpg" alt="The team designing digital experiences in our studio" fill sizes="100vw" className="object-cover" /><div className="film-shade" /><button className="play-button play-button-art" type="button" onClick={() => { setScene(0); setPaused(false); setOpen(true); }} aria-label="Play studio visual story"><Image src="/images/play-button.svg" alt="" fill sizes="(max-width: 700px) 96px, 218px" /><span>Play</span></button></section><Modal open={open} onClose={() => setOpen(false)} title="Aviva studio visual story" className="film-modal"><div className={`film-scene ${paused ? "film-paused" : ""}`} key={scene}><Image src={`/images/${filmScenes[scene].image}`} alt={filmScenes[scene].caption} fill sizes="90vw" className="object-cover" /><div className="film-scene-shade" /><div className="film-titles"><p className="eyebrow">{filmScenes[scene].caption}</p><h2>{filmScenes[scene].label}</h2></div></div><div className="film-controls"><button type="button" onClick={() => setPaused(!paused)}>{paused ? "Play" : "Pause"}</button><div>{filmScenes.map((item, index) => <button key={item.label} type="button" aria-label={`Scene ${index + 1}: ${item.caption}`} aria-pressed={scene === index} className={scene === index ? "selected" : ""} onClick={() => setScene(index)} />)}</div><span>0{scene + 1} / 04</span></div></Modal></>;
+  return <><section className="studio-film" aria-label="Inside the creative studio"><Image src="/images/studio-team.jpg" alt="The team designing digital experiences in our studio" fill sizes="100vw" className="object-cover" /><div className="film-shade" /><button className="play-button play-button-art" type="button" onClick={() => { setScene(0); setPaused(false); setOpen(true); }} aria-label="Play studio visual story"><Image src="/images/play-button.svg" alt="" fill sizes="(max-width: 900px) 96px, 218px" /><span>Play</span></button></section><Modal open={open} onClose={() => setOpen(false)} title="Aviva studio visual story" className="film-modal"><div className={`film-scene ${paused ? "film-paused" : ""}`} key={scene}><Image src={`/images/${filmScenes[scene].image}`} alt={filmScenes[scene].caption} fill sizes="90vw" className="object-cover" /><div className="film-scene-shade" /><div className="film-titles"><p className="eyebrow">{filmScenes[scene].caption}</p><h2>{filmScenes[scene].label}</h2></div></div><div className="film-controls"><button type="button" onClick={() => setPaused(!paused)}>{paused ? "Play" : "Pause"}</button><div>{filmScenes.map((item, index) => <button key={item.label} type="button" aria-label={`Scene ${index + 1}: ${item.caption}`} aria-pressed={scene === index} className={scene === index ? "selected" : ""} onClick={() => setScene(index)} />)}</div><span>0{scene + 1} / 04</span></div></Modal></>;
 }

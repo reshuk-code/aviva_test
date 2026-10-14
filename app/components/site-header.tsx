@@ -1,45 +1,54 @@
 "use client";
 
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import Link from "next/link";
+import { useEffect, useRef, useState, type ComponentProps, type MouseEvent } from "react";
 import { Arrow, Logo } from "./design";
 
 const navigation = [
   { label: "Home", href: "#home" },
   { label: "Services", href: "#services" },
-  { label: "Our works", href: "#projects" },
-  { label: "Get quote", href: "mailto:avivanepal@example.com?subject=Project%20quote", quote: true },
-  { label: "Contact", href: "#contact" },
+  { label: "Our works", href: "/portfolio" },
+  { label: "Get quote", href: "/contact", quote: true },
+  { label: "Contact", href: "/contact" },
 ];
 
 const primaryLinks = [
   { label: "Services", href: "#services" },
-  { label: "Projects", href: "#projects" },
-  { label: "About", href: "#about" },
-  { label: "Blog", href: "#blog" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "About", href: "/about" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const linkGroups = [
   { label: "Design & development", links: [
-    { label: "Web Design", href: "#services" },
-    { label: "Web Development", href: "#services" },
-    { label: "UI / UX Design", href: "#services" },
-    { label: "WordPress", href: "#services" },
+    { label: "Web Design", href: "/services/web-design-development" },
+    { label: "Custom Software", href: "/services/custom-software-development" },
+    { label: "E-commerce", href: "/services/ecommerce-development" },
+    { label: "WordPress", href: "/services/wordpress-development" },
   ] },
   { label: "Brand & strategy", links: [
-    { label: "Brand Identity", href: "#services" },
-    { label: "Marketing Campaigns", href: "#services" },
-    { label: "Creative Consulting", href: "#services" },
-    { label: "Digital Strategy", href: "#services" },
+    { label: "Brand Identity", href: "/services/branding-identity" },
+    { label: "Marketing Campaigns", href: "/services/marketing-campaigns" },
+    { label: "Creative Consulting", href: "/services/creative-consulting" },
+    { label: "SEO Services", href: "/services/seo-services" },
   ] },
   { label: "Explore Aviva", links: [
-    { label: "Selected Projects", href: "#projects" },
+    { label: "Selected Projects", href: "/portfolio" },
     { label: "Why Aviva", href: "#why-us" },
-    { label: "Latest Insights", href: "#blog" },
-    { label: "About the Studio", href: "#about" },
+    { label: "Latest Insights", href: "/blog" },
+    { label: "About the Studio", href: "/about" },
   ] },
 ];
 
-export function Header() {
+// Routes navigate in place (keeping the loading skeletons and progress bar); anchors and mail links stay plain links.
+function NavLink({ href, ...props }: ComponentProps<"a"> & { href: string }) {
+  return href.startsWith("/") && !("data-quote" in props) ? <Link href={href} {...props} /> : <a href={href} {...props} />;
+}
+
+export function Header({ variant = "home" }: { variant?: "home" | "inner" }) {
+  // Section anchors only exist on the home page; elsewhere they lead back to it.
+  const link = (href: string) => variant === "inner" && href.startsWith("#") ? `/${href}` : href;
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showTop, setShowTop] = useState(false);
@@ -107,10 +116,10 @@ export function Header() {
 
   return (
     <><header className={`header${scrolled ? " header-scrolled" : ""}`}>
-      <div className="header-brand"><Logo /></div>
+      <div className="header-brand"><Logo href={variant === "home" ? "#home" : "/"} /></div>
       <span className="header-tagline">The team behind your team<span>- Since 2007</span></span>
       <nav aria-label="Main navigation" className="navigation">
-        {navigation.map((link) => <a key={link.label} href={link.href} data-quote={link.quote ? "" : undefined}>{link.label}</a>)}
+        {navigation.map((item) => <NavLink key={item.label} href={link(item.href)} {...("quote" in item ? { "data-quote": "" } : {})}>{item.label}</NavLink>)}
       </nav>
       <div className="header-actions"><button type="button" className="menu-button" aria-label="Open navigation" aria-haspopup="dialog" aria-controls="fullscreen-navigation" aria-expanded={open} onClick={() => setOpen(true)}>
         {Array.from({ length: 9 }, (_, index) => <span key={index} />)}
@@ -125,16 +134,16 @@ export function Header() {
       }}>
         <div className="fullscreen-menu-inner">
           <div className="fullscreen-menu-header">
-            <Logo onClick={navigate} />
+            <Logo href={variant === "home" ? "#home" : "/"} onClick={navigate} />
             <div className="fullscreen-menu-actions"><button ref={closeButton} type="button" className="fullscreen-menu-close" aria-label="Close navigation" onClick={closeMenu}><span /><span /></button></div>
           </div>
 
           <nav className="fullscreen-menu-body" aria-label="Full-screen navigation">
             <div className="fullscreen-menu-primary">
-              {primaryLinks.map((link, index) => <a key={link.label} href={link.href} className={index === 0 ? "menu-featured" : ""} onClick={navigate}><span>{link.label}</span><Arrow /></a>)}
+              {primaryLinks.map((item, index) => <NavLink key={item.label} href={link(item.href)} className={index === 0 ? "menu-featured" : ""} onClick={navigate}><span>{item.label}</span><Arrow /></NavLink>)}
             </div>
             <div className="fullscreen-menu-groups">
-              {linkGroups.map((group) => <div key={group.label} className="fullscreen-menu-group"><h2>{group.label}</h2>{group.links.map((link) => <a key={link.label} href={link.href} onClick={navigate}>{link.label}</a>)}</div>)}
+              {linkGroups.map((group) => <div key={group.label} className="fullscreen-menu-group"><h2>{group.label}</h2>{group.links.map((item) => <NavLink key={item.label} href={link(item.href)} onClick={navigate}>{item.label}</NavLink>)}</div>)}
             </div>
           </nav>
 
@@ -142,7 +151,7 @@ export function Header() {
             <p>Independent minds.<br /><span>Extraordinary digital experiences.</span></p>
             <div className="fullscreen-menu-contact">
               <a href="mailto:avivanepal@example.com" onClick={navigate}><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.4" /><path d="m4 6 8 6 8-6" stroke="currentColor" strokeWidth="1.4" /></svg>avivanepal@example.com</a>
-              <a className="fullscreen-menu-project" href="mailto:avivanepal@example.com?subject=New%20project" onClick={navigate}>Let’s start a project <Arrow /></a>
+              <a className="fullscreen-menu-project" href="/contact" data-quote onClick={navigate}>Let’s start a project <Arrow /></a>
             </div>
           </div>
         </div>

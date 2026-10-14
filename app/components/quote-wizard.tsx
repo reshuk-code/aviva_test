@@ -1,123 +1,107 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Arrow } from "./design";
 import s from "./quote-wizard.module.css";
 
-const whatsapp = "9779851001237";
-const email = "avivanepal@example.com";
 const services = ["Website design & development", "E-commerce store", "UI / UX design", "Branding & identity", "SEO & digital marketing", "WordPress", "Mobile app", "Something else"];
 const budgets = ["Under Rs 50,000", "Rs 50,000 – 1,50,000", "Rs 1,50,000 – 5,00,000", "Rs 5,00,000+", "Not sure yet"];
 const timelines = ["As soon as possible", "Within a month", "1 – 3 months", "Flexible"];
-const steps = ["What can we help you with?", "Budget and timeline", "Tell us about the project", "Where can we reach you?"];
+const dialCodes = [["+977", "Nepal"], ["+91", "India"], ["+1", "USA / Canada"], ["+44", "United Kingdom"], ["+61", "Australia"], ["+971", "UAE"], ["+974", "Qatar"], ["+966", "Saudi Arabia"], ["+81", "Japan"], ["+82", "South Korea"]];
 
-/** Opens from any element marked `data-quote` and walks the visitor through a short brief. */
+/** Quote request form. Opens from any element marked `data-quote`; a service name as its value preselects that service. */
 export function QuoteWizard() {
   const dialog = useRef<HTMLDialogElement>(null);
-  const heading = useRef<HTMLHeadingElement>(null);
+  const form = useRef<HTMLFormElement>(null);
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState(0);
-  const [chosen, setChosen] = useState<string[]>([]);
-  const [budget, setBudget] = useState("");
-  const [timeline, setTimeline] = useState("");
-  const [details, setDetails] = useState("");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [mail, setMail] = useState("");
+  const [service, setService] = useState("");
   const [error, setError] = useState("");
-  const [sentVia, setSentVia] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sentTo, setSentTo] = useState("");
 
   useEffect(() => {
     const trigger = (event: MouseEvent) => {
       if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      if (!(event.target instanceof Element) || !event.target.closest("[data-quote]")) return;
+      const source = event.target instanceof Element ? event.target.closest("[data-quote]") : null;
+      if (!source) return;
       event.preventDefault();
+      const chosen = source.getAttribute("data-quote");
+      if (chosen && services.includes(chosen)) setService(chosen);
       setOpen(true);
     };
-    document.addEventListener("click", trigger);
-    return () => document.removeEventListener("click", trigger);
+    // Capture phase, so the quote form wins over next/link navigating to the fallback page.
+    document.addEventListener("click", trigger, true);
+    return () => document.removeEventListener("click", trigger, true);
   }, []);
 
   useEffect(() => {
     const element = dialog.current;
     if (!element || !open) return;
     element.showModal();
+    // Start on the first field rather than the close button.
+    element.querySelector<HTMLElement>("form select, form input")?.focus();
     const overflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = overflow; element.close(); };
   }, [open]);
 
-  // Move focus to the new question so keyboard and screen-reader users follow each step.
-  useEffect(() => { if (open) heading.current?.focus(); }, [open, step, sentVia]);
-
   const close = () => {
     setOpen(false); setError("");
-    if (sentVia) { setStep(0); setChosen([]); setBudget(""); setTimeline(""); setDetails(""); setName(""); setPhone(""); setMail(""); setSentVia(""); }
+    if (sentTo) { setSentTo(""); setService(""); }
   };
-  const toggle = (service: string) => { setError(""); setChosen(chosen.includes(service) ? chosen.filter((item) => item !== service) : [...chosen, service]); };
-  const problem = () => {
-    if (step === 0 && !chosen.length) return "Pick at least one thing we can help with.";
-    if (step === 3 && !name.trim()) return "Please tell us your name.";
-    if (step === 3 && !phone.trim() && !mail.trim()) return "Add a phone number or an email so we can reply.";
-    if (step === 3 && mail.trim() && !/^\S+@\S+\.\S+$/.test(mail.trim())) return "That email address doesn’t look right.";
-    return "";
-  };
-  const next = (event: FormEvent) => {
+
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const issue = problem();
-    setError(issue);
-    if (!issue && step < steps.length - 1) setStep(step + 1);
-  };
-  const brief = () => {
-    const line = (label: string, value: string) => value.trim() ? [`${label}: ${value.trim()}`] : [];
-    return ["Hello Aviva, I’d like a quote.", "", ...line("Services", chosen.join(", ")), ...line("Budget", budget), ...line("Timeline", timeline), ...line("Details", details), "", ...line("Name", name), ...line("Phone", phone), ...line("Email", mail)].join("\n");
-  };
-  const send = (channel: "WhatsApp" | "email") => {
-    const issue = problem();
+    const data = Object.fromEntries(new FormData(event.currentTarget)) as Record<string, string>;
+    const name = data.name?.trim(), email = data.email?.trim(), mobile = data.mobile?.trim();
+    const issue = !name ? "Please tell us your name." : !email && !mobile ? "Add a mobile number or an email so we can reply." : email && !/^\S+@\S+\.\S+$/.test(email) ? "That email address doesn’t look right." : "";
     setError(issue);
     if (issue) return;
-    if (channel === "WhatsApp") window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(brief())}`, "_blank", "noopener");
-    else window.location.href = `mailto:${email}?subject=${encodeURIComponent(`Quote request from ${name.trim()}`)}&body=${encodeURIComponent(brief())}`;
-    setSentVia(channel);
+    setSending(true);
+    try {
+      const response = await fetch("/api/inquiries", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "Quote request", services: data.service, budget: data.budget, timeline: data.timeline, message: data.message, name, email, phone: mobile ? `${data.dial} ${mobile}` : "", company: data.company }) });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error);
+      setSentTo(name.split(" ")[0]);
+      form.current?.reset();
+    } catch (failure) {
+      setError(failure instanceof Error && failure.message ? failure.message : "We couldn’t send that just now. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return <dialog ref={dialog} className={s.panel} aria-labelledby="quote-heading" onCancel={(event) => { event.preventDefault(); close(); }} onClick={(event) => { if (event.target === event.currentTarget) close(); }}>
-    {open && <div className={s.sheet}>
+    {open && <div className={s.card}>
       <header className={s.top}>
-        <p className={s.eyebrow}>Get a quote</p>
+        <span className={s.badge}><Image src="/images/aviva-logo.svg" alt="" width={152} height={85} unoptimized /></span>
+        <div>
+          <h2 id="quote-heading">Get a Quote</h2>
+          <p>Share a few details about your project for review</p>
+        </div>
         <button type="button" className={s.close} aria-label="Close quote form" onClick={close}><span /><span /></button>
       </header>
-      {sentVia ? <div className={s.done} key="done">
+
+      {sentTo ? <div className={s.done} role="status">
         <span className={s.tick} aria-hidden="true">✓</span>
-        <h2 id="quote-heading" ref={heading} tabIndex={-1}>Almost there, {name.trim().split(" ")[0]}.</h2>
-        <p>{sentVia === "WhatsApp" ? "Your brief is ready in WhatsApp. Press send there and it comes straight to our team." : "Your brief is ready in your email app. Press send there and it comes straight to our team."}</p>
-        <div className={s.doneActions}>
-          <button type="button" className={s.primary} onClick={close}>Done</button>
-          <button type="button" className={s.ghost} onClick={() => setSentVia("")}>Back to my brief</button>
+        <h3>Thank you, {sentTo}.</h3>
+        <p>We’ve received your request. Our team will review it and get back to you within one business day.</p>
+        <button type="button" className={s.submit} onClick={close}>Done</button>
+      </div> : <form ref={form} className={s.form} onSubmit={submit} noValidate>
+        <h3>Request your quote</h3>
+        <p className={s.intro}>Tell us what you need and how we can reach you. Our team will review your request and discuss scope, pricing, and timelines with you.</p>
+        <div className={s.grid}>
+          <label className={s.field}><span>Service needed</span><select name="service" value={service} onChange={(event) => setService(event.target.value)}><option value="">Choose a service</option>{services.map((item) => <option key={item}>{item}</option>)}</select></label>
+          <label className={s.field}><span>Estimated budget</span><select name="budget" defaultValue=""><option value="">Choose a budget</option>{budgets.map((item) => <option key={item}>{item}</option>)}</select></label>
+          <label className={s.field}><span>Full name</span><input name="name" autoComplete="name" required /></label>
+          <label className={s.field}><span>Email address</span><input name="email" type="email" autoComplete="email" /></label>
+          <div className={s.field}><label htmlFor="quote-mobile">Mobile number</label><div className={s.phone}><select name="dial" aria-label="Country code" defaultValue="+977">{dialCodes.map(([code, country]) => <option key={code} value={code}>{code} {country}</option>)}</select><input id="quote-mobile" name="mobile" type="tel" inputMode="tel" autoComplete="tel-national" /></div></div>
+          <label className={s.field}><span>Timeline</span><select name="timeline" defaultValue=""><option value="">Choose a timeline</option>{timelines.map((item) => <option key={item}>{item}</option>)}</select></label>
+          <label className={`${s.field} ${s.wide}`}><span>Project details (optional)</span><textarea name="message" rows={4} placeholder="Goals, pages you need, websites you like…" /></label>
+          <input className={s.trap} name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" />
         </div>
-      </div> : <form className={s.form} onSubmit={next} noValidate>
-        <div className={s.progress} role="progressbar" aria-label="Quote form progress" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={step + 1}><span style={{ width: `${(step + 1) / steps.length * 100}%` }} /></div>
-        <div className={s.body} key={step}>
-          <p className={s.count}>Step {step + 1} of {steps.length}</p>
-          <h2 id="quote-heading" ref={heading} tabIndex={-1}>{steps[step]}</h2>
-          {step === 0 && <><p className={s.hint}>Choose everything that applies.</p><div className={s.chips}>{services.map((service) => <button key={service} type="button" className={s.chip} aria-pressed={chosen.includes(service)} onClick={() => toggle(service)}>{service}</button>)}</div></>}
-          {step === 1 && <><p className={s.hint}>Both are optional. A rough idea helps us suggest the right approach.</p>
-            <fieldset className={s.group}><legend>Budget</legend><div className={s.chips}>{budgets.map((item) => <button key={item} type="button" className={s.chip} aria-pressed={budget === item} onClick={() => setBudget(budget === item ? "" : item)}>{item}</button>)}</div></fieldset>
-            <fieldset className={s.group}><legend>Timeline</legend><div className={s.chips}>{timelines.map((item) => <button key={item} type="button" className={s.chip} aria-pressed={timeline === item} onClick={() => setTimeline(timeline === item ? "" : item)}>{item}</button>)}</div></fieldset></>}
-          {step === 2 && <><p className={s.hint}>Optional. Goals, pages you need, sites you like, anything useful.</p><label className={s.field}><span>Project details</span><textarea rows={7} value={details} onChange={(event) => setDetails(event.target.value)} placeholder="We run a travel agency and need a new booking website…" /></label></>}
-          {step === 3 && <><p className={s.hint}>We only use these to reply to your request.</p>
-            <label className={s.field}><span>Your name</span><input type="text" autoComplete="name" value={name} onChange={(event) => { setName(event.target.value); setError(""); }} /></label>
-            <label className={s.field}><span>Phone or WhatsApp</span><input type="tel" autoComplete="tel" inputMode="tel" value={phone} onChange={(event) => { setPhone(event.target.value); setError(""); }} /></label>
-            <label className={s.field}><span>Email</span><input type="email" autoComplete="email" value={mail} onChange={(event) => { setMail(event.target.value); setError(""); }} /></label></>}
-          <p className={s.error} role="alert">{error}</p>
-        </div>
-        <footer className={s.actions}>
-          {step > 0 && <button type="button" className={s.ghost} onClick={() => { setError(""); setStep(step - 1); }}>Back</button>}
-          {step < steps.length - 1 ? <button type="submit" className={s.primary}>Continue<Arrow /></button> : <>
-            <button type="button" className={s.primary} onClick={() => send("WhatsApp")}>Send on WhatsApp<Arrow /></button>
-            <button type="button" className={s.secondary} onClick={() => send("email")}>Send by email</button>
-          </>}
-        </footer>
+        <p className={s.error} role="alert">{error}</p>
+        <button type="submit" className={s.submit} disabled={sending}>{sending ? "Sending…" : "Send quote request"}</button>
       </form>}
     </div>}
   </dialog>;
