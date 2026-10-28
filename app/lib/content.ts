@@ -69,7 +69,7 @@ export function toPage(key: string, row: Row | undefined): PageContent {
 export const paragraphs = (text: string) => text.split(/\n\s*\n/).map((part) => part.trim()).filter(Boolean);
 
 // Bump when the shape of cached data changes, so entries written by older code are ignored.
-const cacheVersion = "3";
+const cacheVersion = "6";
 
 // Public reads are cached across requests (Neon may be asleep, so this keeps pages fast) until an admin edit expires the tag.
 const cached = <T, A extends unknown[]>(name: string, load: (...args: A) => Promise<T>) => unstable_cache(load, [cacheVersion, name], { tags: [contentTag], revalidate: 3600 });

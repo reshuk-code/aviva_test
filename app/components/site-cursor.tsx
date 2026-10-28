@@ -27,7 +27,8 @@ export function SiteCursor() {
     };
     const move = (event: PointerEvent) => {
       const target = event.target;
-      if (!allowed.matches || event.pointerType !== "mouse" || !(target instanceof Element)) return hide();
+      // The admin panel keeps the normal system cursor.
+      if (!allowed.matches || event.pointerType !== "mouse" || !(target instanceof Element) || /^\/admin(\/|$)/.test(location.pathname)) return hide();
       if (target.closest('input,textarea,select,[contenteditable]:not([contenteditable="false"]),iframe,[disabled]')) return hide();
       const host = target.closest("dialog[open]") ?? document.body;
       if (cursor.parentElement !== host) host.append(cursor);

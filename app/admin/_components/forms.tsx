@@ -4,7 +4,7 @@ import type { Faq, Post, Project, Seo, Service, TeamMember } from "../../lib/con
 import { technologies } from "../../lib/tech";
 import { deleteMember, deletePost, deleteProject, deleteService, saveMember, savePost, saveProject, saveService } from "../actions";
 import c from "../cms.module.css";
-import { EditorScreen, Field, Panel, SeoPanel, SlugField, slugify, TagField, Tabs, useDraft, type SeoContext } from "./editor";
+import { EditorScreen, Field, Panel, SeoPanel, SeoScore, SlugField, slugify, TagField, Tabs, useDraft, type SeoContext } from "./editor";
 import { ImageField } from "./media";
 import { Repeater } from "./repeater";
 import { RichText } from "./rich-text";
@@ -66,11 +66,12 @@ export function ServiceForm({ item, context }: { item: Service | null; context: 
         { id: "tech", label: "Tech stack", badge: v.techStack.length, content: <TagField label="Technologies" hint="Shown on the service page. Known technologies get their logo." value={v.techStack} onChange={(techStack) => update("techStack", techStack)} suggestions={techNames} /> },
         { id: "faqs", label: "FAQs", badge: v.faqs.length, content: <FaqList faqs={v.faqs} onChange={(faqs) => update("faqs", faqs)} /> },
       ]} />
+      <SeoPanel value={v.seo} onChange={(seo) => update("seo", seo)} path={`/services/${v.slug}`} fallbackTitle={v.title || "Service"} fallbackDescription={v.summary} context={context} />
     </>}
     side={<>
       <Panel title="Featured image"><ImageField label="Banner image" required value={v.image} onChange={(image) => update("image", image)} /></Panel>
       <Panel title="Photos" defaultOpen={false}><ImageField label="Photo 1" value={v.gallery1} onChange={(image) => update("gallery1", image)} /><ImageField label="Photo 2" value={v.gallery2} onChange={(image) => update("gallery2", image)} /></Panel>
-      <SeoPanel value={v.seo} onChange={(seo) => update("seo", seo)} path={`/services/${v.slug}`} fallbackTitle={v.title || "Service"} fallbackDescription={v.summary} context={context} />
+      <SeoScore value={v.seo} fallbackTitle={v.title || "Service"} fallbackDescription={v.summary} context={context} slug={v.slug} image={v.image.src} imageAlt={v.image.alt} content={`${v.intro} ${v.body}`} />
     </>} />;
 }
 
@@ -103,10 +104,11 @@ export function ProjectForm({ item, context }: { item: Project | null; context: 
         { id: "story", label: "Project story", content: <div className={c.field}><span>Story</span><RichText label="Project story" value={v.body} onChange={(body) => update("body", body)} placeholder="The brief, the approach and the result." /></div> },
         { id: "tech", label: "Tech stack", badge: v.techStack.length, content: <TagField label="Technologies used" value={v.techStack} onChange={(techStack) => update("techStack", techStack)} suggestions={techNames} /> },
       ]} />
+      <SeoPanel value={v.seo} onChange={(seo) => update("seo", seo)} path={`/portfolio/${v.slug}`} fallbackTitle={v.title || "Project"} fallbackDescription={v.description} context={context} />
     </>}
     side={<>
       <Panel title="Featured image"><ImageField label="Cover image" required value={v.image} onChange={(image) => update("image", image)} /></Panel>
-      <SeoPanel value={v.seo} onChange={(seo) => update("seo", seo)} path={`/portfolio/${v.slug}`} fallbackTitle={v.title || "Project"} fallbackDescription={v.description} context={context} />
+      <SeoScore value={v.seo} fallbackTitle={v.title || "Project"} fallbackDescription={v.description} context={context} slug={v.slug} image={v.image.src} imageAlt={v.image.alt} content={`${v.description} ${v.body}`} />
     </>} />;
 }
 
@@ -135,10 +137,11 @@ export function PostForm({ item, categories, context }: { item: Post | null; cat
           <datalist id="post-categories">{categories.map((category) => <option key={category} value={category} />)}</datalist>
         </> },
       ]} />
+      <SeoPanel value={v.seo} onChange={(seo) => update("seo", seo)} path={`/blog/${v.slug}`} fallbackTitle={v.title || "Post"} fallbackDescription={v.excerpt} context={context} />
     </>}
     side={<>
       <Panel title="Featured image"><ImageField label="Featured image" required value={v.image} onChange={(image) => update("image", image)} /></Panel>
-      <SeoPanel value={v.seo} onChange={(seo) => update("seo", seo)} path={`/blog/${v.slug}`} fallbackTitle={v.title || "Post"} fallbackDescription={v.excerpt} context={context} />
+      <SeoScore value={v.seo} fallbackTitle={v.title || "Post"} fallbackDescription={v.excerpt} context={context} slug={v.slug} image={v.image.src} imageAlt={v.image.alt} content={v.body} />
     </>} />;
 }
 

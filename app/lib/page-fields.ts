@@ -19,6 +19,7 @@ const banner = (title: string, src: string): [PageSection, Record<string, unknow
 ];
 const lineBreaks = "Press Enter to start a new line where the design breaks the heading.";
 
+const [servicesBanner, servicesBannerDefaults] = banner("Service", "/images/pages/service-1.webp");
 const [aboutBanner, aboutBannerDefaults] = banner("About", "/images/pages/about-banner.webp");
 const [contactBanner, contactBannerDefaults] = banner("Contact Us", "/images/image-192.webp");
 const [blogBanner, blogBannerDefaults] = banner("Blog", "/images/studio-team.jpg");
@@ -66,6 +67,33 @@ export const pageDefinitions: PageDefinition[] = [
       stats: [{ value: "17+", label: "Years of experience" }, { value: "500+", label: "Project completed" }, { value: "399+", label: "Happy customers" }],
       skillsHeading: "The skills behind the work", skillsIntro: "A blend of creativity, strategy, and technical skill—crafted through experience to deliver results A blend ofted through experience to deliver results", skillsLink: "View profile",
       blogLabel: "Blogs & news", blogHeading: "Our Latest News & Blog Posts", blogLink: "More Blog Posts",
+    },
+  },
+  {
+    key: "services-overview", title: "Services", path: "/services", description: "The services overview page: intro, services card and reasons to choose Aviva.",
+    seo: { title: "Services — Aviva", description: "Web design, development, branding and digital marketing services from Aviva, a creative web studio in Kathmandu." },
+    sections: [
+      servicesBanner,
+      { title: "Intro", fields: [image("introImage", "Photo"), text("cardBold", "Card text (bold part)"), text("cardText", "Card text (regular part)"), text("introLabel", "Small label"), area("introHeading", "Heading", lineBreaks), area("introText", "Text", "Leave an empty line between paragraphs.")] },
+      { title: "Services card", fields: [text("servicesHeading1", "Heading line 1"), text("servicesHeading2", "Heading line 2"), image("filmImage", "Background photo", "Shown behind the card. The services themselves are edited under Services.")] },
+      { title: "Why choose us", fields: [text("whyLabel", "Small label"), area("whyHeading", "Heading", lineBreaks), list("reasons", "Reasons", "Reason", [text("title", "Title"), area("text", "Text")]), image("whyImage", "Hexagon image")] },
+    ],
+    defaults: {
+      ...servicesBannerDefaults,
+      introImage: { src: "/images/pages/service-intro.webp", alt: "Two colleagues reviewing a website plan together" },
+      cardBold: "Web Solutions Research", cardText: "and Idea Generate",
+      introLabel: "What we do", introHeading: "Web Design Built\nAround Your Business",
+      introText: "We are a creative web studio in Kathmandu, designing and building websites, brands and digital campaigns for businesses since 2007.\n\nEvery project starts with research into your business and your customers, so the ideas we bring are grounded in what will actually work for you.",
+      servicesHeading1: "Unique Ideas", servicesHeading2: "For Your Business.",
+      filmImage: { src: "/images/studio-meeting.jpg", alt: "The Aviva team working together on laptops" },
+      whyLabel: "Why choose us", whyHeading: "Web Design Company\nThat You Can Trust",
+      reasons: [
+        { title: "Develop new products", text: "We plan, design and build new websites and digital products around your goals." },
+        { title: "Get in touch, think ahead", text: "Clear communication from the first call, with a plan for where your site goes next." },
+        { title: "Design that converts", text: "Layouts and content shaped to turn visitors into enquiries and customers." },
+        { title: "Data & analytics", text: "We measure what matters and use the numbers to keep improving your site." },
+      ],
+      whyImage: { src: "/images/pages/about-hex.webp", alt: "Two colleagues reviewing documents, framed by a lightning bolt" },
     },
   },
   {

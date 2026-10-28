@@ -36,11 +36,18 @@ export function SlugField({ prefix, value, onChange, context, auto, onReset }: {
   </div>;
 }
 
-/** SEO box with live Google preview, like Yoast. Empty fields fall back to the page’s own title and summary. */
-export function SeoPanel({ value, onChange, path, fallbackTitle, fullTitle, fallbackDescription, context }: { value: Seo; onChange: (value: Seo) => void; path: string; fallbackTitle: string; fullTitle?: string; fallbackDescription: string; context: SeoContext }) {
+type SeoSource = { value: Seo; fallbackTitle: string; fullTitle?: string; fallbackDescription: string; context: SeoContext };
+
+/** The title and description search engines will actually get, after falling back to the page’s own title and summary. */
+const resolveSeo = ({ value, fallbackTitle, fullTitle, fallbackDescription, context }: SeoSource) => {
   const automatic = fullTitle || `${fallbackTitle}${context.titleSuffix}`;
-  const title = value.seoTitle || automatic;
-  const description = value.seoDescription || fallbackDescription;
+  return { automatic, title: value.seoTitle || automatic, description: value.seoDescription || fallbackDescription };
+};
+
+/** SEO box with live Google preview, like Yoast. Empty fields fall back to the page’s own title and summary. */
+export function SeoPanel({ onChange, path, ...source }: SeoSource & { onChange: (value: Seo) => void; path: string }) {
+  const { value, fallbackDescription, context } = source;
+  const { automatic, title, description } = resolveSeo(source);
   return <Panel title="SEO">
     <div className={c.serp} aria-label="Search result preview">
       <small>{context.siteUrl.replace(/^https?:\/\//, "")}{path}</small>
@@ -55,6 +62,47 @@ export function SeoPanel({ value, onChange, path, fallbackTitle, fullTitle, fall
     </Field>
     <ImageField label="Social share image" value={{ src: value.ogImage, alt: "" }} onChange={(image) => onChange({ ...value, ogImage: image.src })} />
     <label className={c.check}><input type="checkbox" checked={value.noindex} onChange={(event) => onChange({ ...value, noindex: event.target.checked })} /><span>Hide from search engines<small>Adds “noindex”. The page still works for anyone with the link.</small></span></label>
+  </Panel>;
+}
+
+type Check = { status: "good" | "ok" | "bad"; text: string };
+const points = { good: 1, ok: 0.5, bad: 0 };
+
+/** Live SEO score for the sidebar. Only checks what the editor has: pass `slug`, `image` or `content` to include those checks. */
+export function SeoScore({ slug, image, imageAlt, content, ...source }: SeoSource & { slug?: string; image?: string; imageAlt?: string; content?: string }) {
+  const { value } = source;
+  const { title, description } = resolveSeo(source);
+  const checks: Check[] = [];
+  const add = (status: Check["status"], text: string) => checks.push({ status, text });
+
+  if (value.noindex) add("bad", "Hidden from search engines (noindex).");
+  if (title.length >= 30 && title.length <= 60) add("good", "SEO title length is good.");
+  else if (title.length > 60) add(title.length <= 70 ? "ok" : "bad", "SEO title is too long. Google cuts it off after about 60 characters.");
+  else add(title.length >= 15 ? "ok" : "bad", "SEO title is short. Aim for 30–60 characters.");
+  if (!description) add("bad", "No meta description. Add one so you control the search snippet.");
+  else if (description.length >= 120 && description.length <= 160) add("good", "Meta description length is good.");
+  else if (description.length > 160) add("ok", "Meta description is long and will be cut off.");
+  else add(description.length >= 50 ? "ok" : "bad", "Meta description is short. Aim for 120–160 characters.");
+  if (slug !== undefined) {
+    if (!slug) add("bad", "The page has no permalink yet.");
+    else add(slug.length <= 50 && slug.split("-").length <= 6 ? "good" : "ok", slug.length <= 50 && slug.split("-").length <= 6 ? "Permalink is short and readable." : "Permalink is long. Shorter links are easier to share.");
+  }
+  if (image !== undefined) add(image && imageAlt?.trim() ? "good" : "ok", image && imageAlt?.trim() ? "Featured image has alt text." : "Add alt text to the featured image.");
+  add(value.ogImage || image ? "good" : "ok", value.ogImage || image ? "Has an image for social shares." : "No share image set, so the site default is used.");
+  if (content !== undefined) {
+    const words = content.replace(/<[^>]*>/g, " ").split(/\s+/).filter(Boolean).length;
+    add(words >= 300 ? "good" : words >= 100 ? "ok" : "bad", words >= 300 ? `Content length is good (${words} words).` : `Only ${words} words of content. Aim for at least 300.`);
+  }
+
+  const score = Math.round(checks.reduce((sum, check) => sum + points[check.status], 0) / checks.length * 100);
+  const grade = score >= 80 ? "good" : score >= 50 ? "ok" : "bad";
+  const order = { bad: 0, ok: 1, good: 2 };
+  return <Panel title="SEO score">
+    <div className={c.seoScore} data-grade={grade}>
+      <div className={c.seoRing} style={{ "--score": score } as React.CSSProperties} role="img" aria-label={`SEO score ${score} out of 100`}><strong>{score}</strong></div>
+      <div><strong>{grade === "good" ? "Good" : grade === "ok" ? "Needs work" : "Poor"}</strong><small>Updates as you type.</small></div>
+    </div>
+    <ul className={c.seoChecks}>{[...checks].sort((a, b) => order[a.status] - order[b.status]).map((check) => <li key={check.text} data-status={check.status}>{check.text}</li>)}</ul>
   </Panel>;
 }
 

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { bindImageTilt } from "./image-tilt";
+import { bindPillRepel } from "./pill-repel";
 import { Arrow, Art } from "./design";
 export { Header } from "./site-header";
 
@@ -70,6 +71,7 @@ export function DropList({ className = "", labelledBy, children }: { className?:
     observer.observe(element);
     return () => { observer.disconnect(); delete element.dataset.drop; };
   }, []);
+  useEffect(() => (list.current ? bindPillRepel(list.current) : undefined), []);
   return <ul ref={list} className={className} aria-labelledby={labelledBy}>{children}</ul>;
 }
 

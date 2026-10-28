@@ -4,7 +4,7 @@ import type { Seo } from "../../lib/content";
 import { pageDefinition, type Field as FieldDefinition, type ImageValue } from "../../lib/page-fields";
 import { savePage } from "../actions";
 import c from "../cms.module.css";
-import { EditorScreen, Field, Panel, SeoPanel, Tabs, useDraft, type SeoContext } from "./editor";
+import { EditorScreen, Field, Panel, SeoPanel, SeoScore, Tabs, useDraft, type SeoContext } from "./editor";
 import { ImageField } from "./media";
 import { Repeater } from "./repeater";
 import { RichText } from "./rich-text";
@@ -44,7 +44,8 @@ export function PageEditor({ pageKey, content, seo, updatedAt, context }: { page
       <p className={c.hint}>{definition.description}</p>
       <Tabs label={`${definition.title} sections`} tabs={definition.sections.map((section) => ({ id: section.title.toLowerCase().replace(/\W+/g, "-"), label: section.title,
         content: section.fields.map((field) => <Control key={field.key} field={field} value={v.content[field.key]} onChange={(next) => set(field.key, next)} />) }))} />
+      {hasSeo && <SeoPanel value={v.seo} onChange={(next) => update("seo", next)} path={definition.path} fallbackTitle={definition.title} fullTitle={definition.seo.title} fallbackDescription={definition.seo.description} context={context} />}
     </>}
-    side={hasSeo ? <SeoPanel value={v.seo} onChange={(next) => update("seo", next)} path={definition.path} fallbackTitle={definition.title} fullTitle={definition.seo.title} fallbackDescription={definition.seo.description} context={context} />
+    side={hasSeo ? <SeoScore value={v.seo} fallbackTitle={definition.title} fullTitle={definition.seo.title} fallbackDescription={definition.seo.description} context={context} />
       : <Panel title="SEO"><p className={c.hint}>Each service page uses its own SEO settings, edited under Services.</p></Panel>} />;
 }

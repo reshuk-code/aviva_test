@@ -5,7 +5,7 @@ import { bindImageTilt } from "./image-tilt";
 
 export function BrandEffects() {
   useEffect(() => {
-    const cleanups = Array.from(document.querySelectorAll<HTMLElement>(".cursor-photo, .hero-office, .cursor-portrait, .blog-card")).map(bindImageTilt);
+    const cleanups = Array.from(document.querySelectorAll<HTMLElement>(".cursor-photo, .hero-office, .blog-card")).map(bindImageTilt);
     return () => cleanups.forEach(cleanup => cleanup());
   }, []);
   useEffect(() => {

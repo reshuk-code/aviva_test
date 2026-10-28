@@ -6,14 +6,14 @@ import { Arrow, Logo } from "./design";
 
 const navigation = [
   { label: "Home", href: "#home" },
-  { label: "Services", href: "#services" },
+  { label: "Services", href: "/services" },
   { label: "Our works", href: "/portfolio" },
   { label: "Get quote", href: "/contact", quote: true },
   { label: "Contact", href: "/contact" },
 ];
 
 const primaryLinks = [
-  { label: "Services", href: "#services" },
+  { label: "Services", href: "/services" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "About", href: "/about" },
   { label: "Blog", href: "/blog" },

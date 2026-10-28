@@ -10,7 +10,7 @@ const quickLinks = [
   { label: "UI / UX Design", href: "/services/web-design-development" },
   { label: "WordPress", href: "/services/wordpress-development" },
   { label: "Portfolio", href: "/portfolio" },
-  { label: "Popular Services", href: "#services" },
+  { label: "Popular Services", href: "/services" },
   { label: "Web Design", href: "/services/web-design-development" },
   { label: "Branding", href: "/services/branding-identity" },
 ];
