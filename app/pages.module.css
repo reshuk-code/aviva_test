@@ -6,7 +6,7 @@
 .container{width:min(1310px,calc(100% - 40px));margin-inline:auto}
 @media(min-width:601px){.container{width:min(1310px,calc(100% - 64px))}}
 /* Wide screens line the content up with the footer column, which scales with the design. */
-@media(min-width:1025px){.container{width:min(1310px,max(68.2vw,min(calc(100% - 64px),900px)))}}
+@media(min-width:1025px){.container{width:min(1580px,max(82vw,min(calc(100% - 64px),900px)))}}
 
 /* Banner */
 .banner{position:relative;isolation:isolate;display:grid;place-items:center;width:min(1720px,calc(100% - clamp(24px,10.4vw,200px)));height:clamp(220px,28.6vw,550px);margin:clamp(4px,1vw,16px) auto 0;border-radius:clamp(8px,.8vw,14px);overflow:hidden;color:#fff;text-align:center;background:#1b1918}

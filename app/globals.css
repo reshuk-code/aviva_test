@@ -268,3 +268,7 @@ html{scrollbar-gutter:stable}
 .top-loader.is-active{opacity:1;transition-delay:0s}
 .top-loader span{display:block;height:100%;background:#ff8a00;box-shadow:0 0 10px #ff8a00b3,0 0 4px #ff8a0066;transform:scaleX(var(--progress,0));transform-origin:left;transition:transform .3s ease}
 @media(prefers-reduced-motion:reduce){.top-loader span{transition:none}}
+
+/* Readable text on phones and tablets: lifts every size built on --text-boost. */
+@media(max-width:900px){:root{--text-boost:3px}}
+@media(max-width:600px){:root{--text-boost:4px}}
