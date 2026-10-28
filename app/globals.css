@@ -269,10 +269,10 @@ html{scrollbar-gutter:stable}
 .top-loader span{display:block;height:100%;background:#ff8a00;box-shadow:0 0 10px #ff8a00b3,0 0 4px #ff8a0066;transform:scaleX(var(--progress,0));transform-origin:left;transition:transform .3s ease}
 @media(prefers-reduced-motion:reduce){.top-loader span{transition:none}}
 
-/* Laptops: the desktop layout shrinks with the screen, so the header menu gets bigger as the screen gets narrower.
+/* Laptops: the desktop layout shrinks with the screen, so the header menu is pinned at 16px (its size on a 1920px screen).
    Only the menu: the other desktop sections are tight compositions and overlap if their text grows. */
-@media(min-width:901px) and (max-width:1919px){.navigation a{--text-boost:calc((1920px - 100vw) * .006)}}
-@media(min-width:901px) and (max-width:1199px){.header-tagline{display:none}}
+@media(min-width:901px) and (max-width:1919px){.navigation a{font-size:16px!important}}
+@media(min-width:901px) and (max-width:1439px){.header-tagline{display:none}}
 /* Readable text on phones and tablets: lifts every size built on --text-boost. */
 @media(max-width:900px){:root{--text-boost:4px}}
 @media(max-width:600px){:root{--text-boost:5px}}

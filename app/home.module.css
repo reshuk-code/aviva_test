@@ -490,3 +490,45 @@
 /* Narrow laptops (901–1100px): fit the hero text box, let the benefit list wrap, and let the about section grow so "Read more" doesn't run into the next heading. */
 @media(min-width:901px) and (max-width:1100px){.heroNote{top:calc(530 * var(--u))}.heroNote>p:nth-of-type(2){display:none}}
 @media(min-width:901px) and (max-width:1100px){.benefits li{white-space:normal}.about{height:auto;min-height:calc(784 * var(--u));padding-bottom:40px}}
+/* Laptops (901–1919px): the layout shrinks with the screen, but body text keeps its full desktop size
+   so it stays readable. Headings still scale with the layout. */
+@media(min-width:901px) and (max-width:1919px){
+  .label{font-size:14px}
+  .heroLead{font-size:16px}
+  .heroNote{font-size:16px;line-height:1.6}
+  .heroAuthor strong{font-size:16px}
+  .heroAuthor span,.heroAuthor>a{font-size:14px}
+  .aboutLead,.whyLead{font-size:20px}
+  .aboutCopy>p:not(.label):not(.aboutLead),.whyCopy>p:not(.label):not(.whyLead){font-size:16px}
+  .readMore{font-size:13px}
+  .service h3{font-size:18px}
+  .service p,.step p{font-size:16px}
+  .step h3{font-size:22px}
+  .page :global(.project-caption p){font-size:15px}
+  .page :global(.project-caption h3){font-size:22px}
+  .benefits,.benefits li>span{font-size:15px}
+  .orangeButton{font-size:14px}
+  .stats dd{font-size:15px}
+  .skillsIntro p{font-size:16px}
+  .skillsLink{font-size:14px}
+  .skill{font-size:16px}
+  .page :global(.blog-card>p){font-size:15px}
+  .page :global(.blog-card h3){font-size:20px}
+  .footerTop>a,.footerTop small,.footerTop :global(.social-links a){font-size:14px}
+  .footerEmail,.footerLinks>div,.footerOther>a{font-size:15px}
+  .footerLinks h3,.footerOther h3{font-size:22px}
+  .copyright{font-size:13px}
+}
+/* Laptops: give the sections room for the full-size text above. */
+@media(min-width:901px) and (max-width:1919px){
+  .heroLead{margin-bottom:8px!important}
+  .about{height:auto;min-height:calc(784 * var(--u));padding-bottom:70px}
+  .whyUs{height:auto;min-height:calc(750 * var(--u));padding-bottom:40px}
+  .whyCopy{max-width:none}
+  .benefits li{white-space:normal}
+  .benefits li>span{width:18px;height:18px;font-size:11px}
+  .stats{padding-inline:calc(140 * var(--u))}
+  .stats dd{letter-spacing:.16em;white-space:normal}
+}
+@media(min-width:901px) and (max-width:1919px){.hero{height:calc(1140 * var(--u) + 80px)}}
+@media(min-width:901px) and (max-width:1919px){.page :global(.header-tagline){font-size:13px}}

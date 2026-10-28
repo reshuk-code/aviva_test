@@ -316,3 +316,14 @@
 .inner .servicesWhy .reasons h3{text-transform:uppercase;font-weight:700;letter-spacing:.01em}
 .servicesHex{justify-self:center;width:clamp(240px,25vw,480px);height:auto;margin-top:clamp(0px,8vw,160px)}
 @media(max-width:900px){.introVisual{margin-inline:auto}.servicesWhy{margin-top:-90px}.servicesBand{padding-bottom:180px}.bandPhoto{top:120px}.servicesHex{margin-top:0;width:min(80%,360px)}.introContour{display:none}}
+/* Laptops (901–1919px): keep small text at a readable size instead of letting it shrink with the screen. */
+@media(min-width:901px) and (max-width:1919px){
+  .bannerCopy nav,.bannerCopy>p{font-size:15px}
+  .postCard>p,.serviceList a,.reasons p{font-size:15px}
+  .works :global(.project-caption p){font-size:14px}
+  .article,.contactInfo address,.facts>div,.serviceMain,.serviceFaqs summary,.darkFaqs summary,.notFoundText,.prose,.introCopy,.aboutQuote,.cta{font-size:16px}
+  .inner .reasons h3{font-size:18px}
+  .aboutStats dd{font-size:13px}
+  .yearsBadge small{font-size:18px}
+  .recent small,.pager a[rel] span{font-size:13px}
+}
